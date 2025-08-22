@@ -48,18 +48,6 @@ body {
   position: relative;
 }
 
-/* Wavy shape between left/right */
-.auth-right::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -60px;
-  width: 120px;
-  height: 100%;
-  background: #324941;
-  clip-path: ellipse(60% 100% at right center);
-}
-
 /* Card boxes */
 .card {
   background: #f6f5f2;
@@ -419,6 +407,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
