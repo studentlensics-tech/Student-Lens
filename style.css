@@ -19,7 +19,7 @@ body {
   height: 100vh; /* full screen height */
   width: 100%;
   display: flex; /* so left + right sit side by side */
-  background-image: url("your-image.jpg"); /* put your image here */
+  background-image: url("img/Dark.pnj"); /* put your image here */
   background-size: cover; /* makes it fill the screen */
   background-position: center; /* keeps it centered */
   background-repeat: no-repeat;
@@ -426,6 +426,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
