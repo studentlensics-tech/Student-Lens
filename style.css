@@ -57,7 +57,7 @@ body {
   background: #f6f5f2;
   border-radius: 18px;
   padding: 35px 40px; /* bigger padding */
-  width: 420px;       /* wider card */
+  width: 500px;       /* wider card */
   text-align: left;
   box-shadow: 0 3px 10px rgba(50,73,65,0.09);
 
@@ -419,6 +419,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
