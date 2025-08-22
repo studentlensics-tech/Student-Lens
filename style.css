@@ -18,6 +18,7 @@ body {
 #auth-screen {
   display: flex;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .auth-left {
@@ -28,11 +29,14 @@ body {
   justify-content: center;
   padding: 2rem;
 }
+
 .auth-left h1 {
   color: #2c4141;
-  font-size: 2.5rem;
+  font-size: 3.5rem; /* larger */
   text-align: center;
   font-family: "Playfair Display", serif;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 .auth-right {
@@ -41,13 +45,25 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2.5rem;
+  gap: 2rem;
   align-items: center;
-  border-top-left-radius: 120px;
-  min-height: 100vh;
   padding: 2rem;
+  position: relative;
 }
 
+/* Wavy shape between left/right */
+.auth-right::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60px;
+  width: 120px;
+  height: 100%;
+  background: #324941;
+  clip-path: ellipse(60% 100% at right center);
+}
+
+/* Card boxes */
 .card {
   background: #f6f5f2;
   border-radius: 18px;
@@ -56,41 +72,42 @@ body {
   text-align: center;
   box-shadow: 0 3px 10px rgba(50,73,65,0.09);
 }
+
 .card p {
   color: #324941;
-  font-size: 1.15rem;
-  font-weight: 500;
-  margin-bottom: 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
+/* Updated Google button */
 .google-btn {
   background: #fff;
-  border: 1px solid #c2c2c2;
+  border: 1.5px solid #324941;
   border-radius: 8px;
   padding: 12px 20px 12px 42px;
   font-size: 1rem;
-  color: #313131;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: #324941;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   position: relative;
-  transition: background 0.15s;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
 }
+
 .google-btn img {
   position: absolute;
   left: 12px;
   height: 22px;
   width: 22px;
 }
+
 .google-btn:hover {
   background: #eff3f7;
-}
-
-#auth-message {
-  margin-top: 20px;
-  color: #174a47;
-  font-size: 1.15rem;
-  text-align: center;
+  border-color: #20362f;
 }
 
 /* -------------------------
@@ -405,4 +422,5 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
