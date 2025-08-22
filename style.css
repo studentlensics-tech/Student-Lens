@@ -31,7 +31,7 @@ body {
 .auth-left h1 {
   color: #2c4141;
   font-size: 3.5rem; /* larger */
-  text-align: left;
+  text-align: centre;
   font-family: "Times New Roman", serif;
   font-weight: 700;
   line-height: 1.2;
@@ -53,15 +53,17 @@ body {
   background: #f6f5f2;
   border-radius: 18px;
   padding: 30px 35px;
-  width: 350px;
-  text-align: center;
+  width: 400px;
+  text-align: left;
+font-family: "Times New Roman", serif;
   box-shadow: 0 3px 10px rgba(50,73,65,0.09);
 }
 
 .card p {
   color: #324941;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 600;
+   font-family: "Times New Roman", serif;
   margin-bottom: 20px;
 }
 
@@ -73,6 +75,7 @@ body {
   padding: 12px 20px 12px 42px;
   font-size: 1rem;
   font-weight: 600;
+   font-family: "Times New Roman", serif;
   text-transform: capitalize;
   color: #324941;
   cursor: pointer;
@@ -407,6 +410,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
