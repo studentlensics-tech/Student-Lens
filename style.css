@@ -20,7 +20,6 @@ body {
   min-height: 100vh;
   justify-content: center;
   align-items: center;
-  background: #2c4141; /* optional */
   gap: 2rem;
 }
 
@@ -415,6 +414,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
