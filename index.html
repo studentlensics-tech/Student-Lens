@@ -178,32 +178,52 @@
 
   <!-- Script for Google Login -->
   <script>
-    function handleCredentialResponse(response) {
-      const data = jwt_decode(response.credential);
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('main-screen').style.display = 'block';
-      document.getElementById('profile-name').innerHTML = data.name;
-      document.getElementById('profile-pic').src = data.picture;
+  async function handleCredentialResponse(response) {
+    try {
+      // Send the ID token to your backend
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken: response.credential })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        document.getElementById("auth-message").textContent = data.error || "Login failed.";
+        return;
+      }
+
+      // Success → update UI with name + picture
+      document.getElementById("auth-screen").style.display = "none";
+      document.getElementById("main-screen").style.display = "block";
+      document.getElementById("profile-name").innerHTML = data.email;
+      // optional: set picture from payload if you pass it back
+    } catch (err) {
+      console.error(err);
+      document.getElementById("auth-message").textContent = "Something went wrong.";
     }
+  }
 
-    window.onload = function () {
-      google.accounts.id.initialize({
-        client_id: "538948576836-1kk0cph50bg3e5ulupjhhjri6nm13snh.apps.googleusercontent.com",
-        callback: handleCredentialResponse
-      });
+  window.onload = function () {
+    google.accounts.id.initialize({
+      client_id: "538948576836-1kk0cph50bg3e5ulupjhhjri6nm13snh.apps.googleusercontent.com",
+      callback: handleCredentialResponse
+    });
 
-      document.getElementById("signUpBtn").addEventListener("click", function() {
-        google.accounts.id.prompt();
-      });
-      document.getElementById("logInBtn").addEventListener("click", function() {
-        google.accounts.id.prompt();
-      });
-    };
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    document.getElementById("signUpBtn").addEventListener("click", function() {
+      window.authMode = "signup";
+      google.accounts.id.prompt();
+    });
 
-</body>
-</html>
+    document.getElementById("logInBtn").addEventListener("click", function() {
+      window.authMode = "login";
+      google.accounts.id.prompt();
+    });
+  };
+</script>
+
+
 
 
 
