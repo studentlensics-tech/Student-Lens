@@ -30,9 +30,9 @@ body {
 
 .auth-left h1 {
   color: #2c4141;
-  font-size: 3.5rem; /* larger */
+  font-size: 5rem; /* larger */
   text-align: center;
-  font-family: "Playfair Display", serif;
+  font-family: "Times New Roman", serif;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -407,6 +407,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
