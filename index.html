@@ -177,32 +177,32 @@
   </div>
 
   <!-- Script for Google Login -->
-  <script>
-  async function handleCredentialResponse(response) {
-    try {
-      // Send the ID token to your backend
-      const res = await fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken: response.credential })
-      });
+<script>
+  function handleCredentialResponse(response) {
+    const idToken = response.credential;
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        document.getElementById("auth-message").textContent = data.error || "Login failed.";
-        return;
+    // Send token to backend
+    fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        document.getElementById("auth-message").textContent = data.error;
+      } else {
+        // Success → show main screen
+        document.getElementById("auth-screen").style.display = "none";
+        document.getElementById("main-screen").style.display = "block";
+        document.getElementById("profile-name").innerHTML = data.name;
+        document.getElementById("profile-pic").src = data.picture;
       }
-
-      // Success → update UI with name + picture
-      document.getElementById("auth-screen").style.display = "none";
-      document.getElementById("main-screen").style.display = "block";
-      document.getElementById("profile-name").innerHTML = data.email;
-      // optional: set picture from payload if you pass it back
-    } catch (err) {
-      console.error(err);
+    })
+    .catch(err => {
+      console.error("Login error:", err);
       document.getElementById("auth-message").textContent = "Something went wrong.";
-    }
+    });
   }
 
   window.onload = function () {
@@ -212,16 +212,15 @@
     });
 
     document.getElementById("signUpBtn").addEventListener("click", function() {
-      window.authMode = "signup";
       google.accounts.id.prompt();
     });
-
     document.getElementById("logInBtn").addEventListener("click", function() {
-      window.authMode = "login";
       google.accounts.id.prompt();
     });
   };
 </script>
+
+
 
 
 
