@@ -26,23 +26,44 @@ function handleCredentialResponse(response) {
         }
     }
 }
+
  // Login Restriction
 app.post("/login", async (req, res) => {
-  const token = req.body.idToken;
+  try {
+    console.log("Incoming login request:", req.body);
 
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: process.env.GOOGLE_CLIENT_ID,
-  });
+    const token = req.body.idToken;
+    if (!token) {
+      return res.status(400).json({ error: "No token received" });
+    }
 
-  const payload = ticket.getPayload();
-  const email = payload.email;
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID, // ⚠️ must match EXACTLY your Google console client ID
+    });
 
-  const allowedDomain = "icsz.ch";
-  if (!email.endsWith("@" + allowedDomain)) {
-    return res.status(403).json({ error: "Access denied. Use your university email." });
+    const payload = ticket.getPayload();
+    console.log("Verified Google payload:", payload);
+
+    const email = payload.email;
+    const allowedDomain = "icsz.ch";
+
+    if (!email.endsWith("@" + allowedDomain)) {
+      return res.status(403).json({ error: "Access denied. Use your school email." });
+    }
+
+    res.json({
+      success: true,
+      email,
+      name: payload.name,
+      picture: payload.picture
+    });
+
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(401).json({ error: "Invalid token" });
   }
-
+});
     
   // Allow login
   res.json({ success: true, email });
@@ -70,4 +91,5 @@ window.onload = function () {
         google.accounts.id.prompt();
     });
 };
+
 
