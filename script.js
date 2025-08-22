@@ -26,6 +26,27 @@ function handleCredentialResponse(response) {
         }
     }
 }
+ // Login Restriction
+app.post("/login", async (req, res) => {
+  const token = req.body.idToken;
+
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+
+  const payload = ticket.getPayload();
+  const email = payload.email;
+
+  const allowedDomain = "icsz.ch";
+  if (!email.endsWith("@" + allowedDomain)) {
+    return res.status(403).json({ error: "Access denied. Use your university email." });
+  }
+
+    
+  // Allow login
+  res.json({ success: true, email });
+});
 
 function showMainScreen() {
     document.getElementById("auth-screen").style.display = "none";
@@ -49,3 +70,4 @@ window.onload = function () {
         google.accounts.id.prompt();
     });
 };
+
