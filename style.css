@@ -16,13 +16,8 @@ body {
    LOGIN SCREEN
    ------------------------- */
 #auth-screen {
-  height: 100vh; /* full screen height */
-  width: 100%;
-  display: flex; /* so left + right sit side by side */
-  background-image: url("img/Dark.png"); /* put your image here */
-  background-size: cover; /* makes it fill the screen */
-  background-position: center; /* keeps it centered */
-  background-repeat: no-repeat;
+  display: flex;
+  min-height: 100vh;
 }
 
 .auth-left {
@@ -426,6 +421,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
