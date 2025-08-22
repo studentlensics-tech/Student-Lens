@@ -38,7 +38,7 @@ body {
   text-align: center;
   font-weight: 700;
   line-height: 1.3;
-  max-width: 80%;
+  max-width: 100%;
 }
 
 .auth-right {
@@ -419,6 +419,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
