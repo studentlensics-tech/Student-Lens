@@ -58,14 +58,14 @@ body {
   border-radius: 18px;
   padding: 25px 30px;
   width: 320px;
-  text-align: center; /* center content */
+  text-align: left; /* center content */
   font-family: "Times New Roman", serif;
   box-shadow: 0 3px 10px rgba(50,73,65,0.09);
 }
 
 .card p {
   color: #324941;
-  font-size: 1rem; /* reduced */
+  font-size: 1.2rem; /* reduced */
   font-weight: 600;
   font-family: "Times New Roman", serif;
   margin-bottom: 15px;
@@ -414,6 +414,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
