@@ -180,6 +180,7 @@
 <script>
   function handleCredentialResponse(response) {
     const idToken = response.credential;
+    console.log("Sending token to backend:", idToken);
 
     // Send token to backend
     fetch("/login", {
@@ -219,6 +220,7 @@
     });
   };
 </script>
+
 
 
 
