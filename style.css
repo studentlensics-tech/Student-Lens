@@ -21,6 +21,8 @@ body {
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  /* no background here so your HTML background image shows */
+  font-family: "Times New Roman", serif;
 }
 
 .auth-left {
@@ -32,10 +34,9 @@ body {
 }
 
 .auth-left h1 {
-  color: #f6f5f2;
-  font-size: 2.5rem; /* smaller, readable */
-  text-align: center; /* fixed spelling */
-  font-family: "Times New Roman", serif;
+  color: #2c4141; /* greenish-blue */
+  font-size: 2.8rem;
+  text-align: center;
   font-weight: 700;
   line-height: 1.3;
   max-width: 80%;
@@ -57,18 +58,17 @@ body {
   background: #f6f5f2;
   border-radius: 18px;
   padding: 25px 30px;
-  width: 320px;
-  text-align: left; /* center content */
-  font-family: "Times New Roman", serif;
+  width: 360px;
+  text-align: left; /* align text to left */
   box-shadow: 0 3px 10px rgba(50,73,65,0.09);
 }
 
 .card p {
   color: #324941;
-  font-size: 1.2rem; /* reduced */
+  font-size: 1.25rem; /* larger */
   font-weight: 600;
-  font-family: "Times New Roman", serif;
   margin-bottom: 15px;
+  padding-left: 5px; /* small padding for nice spacing */
 }
 
 /* Updated Google button */
@@ -77,9 +77,8 @@ body {
   border: 1.5px solid #324941;
   border-radius: 8px;
   padding: 10px 16px 10px 40px;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
-  font-family: "Times New Roman", serif;
   text-transform: capitalize;
   color: #324941;
   cursor: pointer;
@@ -414,6 +413,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
