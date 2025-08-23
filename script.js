@@ -1,7 +1,7 @@
 // =============================
 // Firebase Setup
 // =============================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 // Firebase config from your Firebase Console
@@ -15,16 +15,14 @@ const firebaseConfig = {
   measurementId: "G-V3YBM8DZXW"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);   // ✅ only declared once
+// ✅ Initialize app safely (won’t throw if called twice)
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 // =============================
-// Old client_id removed — Firebase handles this
+// Local storage-based "account" tracking
 // =============================
-
-// Local storage-based "account" tracking (still works as before)
 function handleLoginResult(user, mode) {
     const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
     const isExisting = existingUsers.some(u => u.email === user.email);
@@ -61,12 +59,10 @@ function showMainScreen() {
 // =============================
 window.onload = function () {
     document.getElementById("signUpBtn").addEventListener("click", () => {
-        window.authMode = "signup";
         signInWithPopup(auth, provider)
             .then((result) => {
                 const user = result.user;
 
-                // ✅ Restrict to @icsz.ch
                 const domain = user.email.split("@")[1];
                 if (domain !== "icsz.ch") {
                     alert("You must use your school email to sign up.");
@@ -82,12 +78,10 @@ window.onload = function () {
     });
 
     document.getElementById("logInBtn").addEventListener("click", () => {
-        window.authMode = "login";
         signInWithPopup(auth, provider)
             .then((result) => {
                 const user = result.user;
 
-                // ✅ Restrict to @icsz.ch
                 const domain = user.email.split("@")[1];
                 if (domain !== "icsz.ch") {
                     alert("You must use your school email to log in.");
@@ -108,15 +102,11 @@ window.onload = function () {
 // =============================
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // User is signed in → stay on main screen
     document.getElementById("auth-screen").style.display = "none";
     document.getElementById("main-screen").style.display = "block";
-
-    // Optional: update profile info
     document.getElementById("profile-name").innerHTML = user.displayName || user.email;
     document.getElementById("profile-pic").src = user.photoURL || "img/IcsBuilding.jpg";
   } else {
-    // No user → show login screen
     document.getElementById("auth-screen").style.display = "flex";
     document.getElementById("main-screen").style.display = "none";
   }
