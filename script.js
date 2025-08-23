@@ -105,9 +105,6 @@ window.onload = function () {
 
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-// Get Firebase Auth instance
-const auth = getAuth();
-
 // Watch for user state changes
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -124,4 +121,5 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("main-screen").style.display = "none";
   }
 });
+
 
