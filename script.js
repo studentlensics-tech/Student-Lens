@@ -102,3 +102,26 @@ window.onload = function () {
             });
     });
 };
+
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+// Get Firebase Auth instance
+const auth = getAuth();
+
+// Watch for user state changes
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in → stay on main screen
+    document.getElementById("auth-screen").style.display = "none";
+    document.getElementById("main-screen").style.display = "block";
+
+    // Optional: update profile info
+    document.getElementById("profile-name").innerHTML = user.displayName || user.email;
+    document.getElementById("profile-pic").src = user.photoURL || "img/IcsBuilding.jpg";
+  } else {
+    // No user → show login screen
+    document.getElementById("auth-screen").style.display = "flex";
+    document.getElementById("main-screen").style.display = "none";
+  }
+});
+
