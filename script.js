@@ -2,7 +2,7 @@
 // Firebase Setup
 // =============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 // Firebase config from your Firebase Console
 const firebaseConfig = {
@@ -17,7 +17,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const auth = getAuth(app);   // ✅ only declared once
 const provider = new GoogleAuthProvider();
 
 // =============================
@@ -103,9 +103,9 @@ window.onload = function () {
     });
 };
 
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-// Watch for user state changes
+// =============================
+// Persist login state on reload
+// =============================
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in → stay on main screen
@@ -121,5 +121,3 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("main-screen").style.display = "none";
   }
 });
-
-
