@@ -1,25 +1,46 @@
-const CLIENT_ID = "538948576836-1kk0cph50bg3e5ulupjhhjri6nm13snh.apps.googleusercontent.com";
+// =============================
+// Firebase Setup
+// =============================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-function handleCredentialResponse(response) {
-    const token = response.credential;
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    console.log("Google payload:", payload);
+// Firebase config from your Firebase Console
+const firebaseConfig = {
+  apiKey: "AIzaSyAsGS-W7EZ_ZX7Cgv_ZxwOLZkp-u8ilaRQ",
+  authDomain: "studentlensics-4369f.firebaseapp.com",
+  projectId: "studentlensics-4369f",
+  storageBucket: "studentlensics-4369f.firebasestorage.app",
+  messagingSenderId: "792919091240",
+  appId: "1:792919091240:web:31ae2869ddd8b0d28cad1d",
+  measurementId: "G-V3YBM8DZXW"
+};
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// =============================
+// Old client_id removed — Firebase handles this
+// =============================
+
+// Local storage-based "account" tracking (still works as before)
+function handleLoginResult(user, mode) {
     const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
-    const isExisting = existingUsers.some(user => user.email === payload.email);
+    const isExisting = existingUsers.some(u => u.email === user.email);
 
-    if (window.authMode === "signup") {
+    if (mode === "signup") {
         if (isExisting) {
             document.getElementById("auth-message").textContent = "Account already exists. Please log in.";
         } else {
-            existingUsers.push({ email: payload.email, name: payload.name });
+            existingUsers.push({ email: user.email, name: user.displayName });
             localStorage.setItem("users", JSON.stringify(existingUsers));
-            document.getElementById("auth-message").textContent = Welcome, ${payload.name}! Account created.;
+            document.getElementById("auth-message").textContent = `Welcome, ${user.displayName}! Account created.`;
             showMainScreen();
         }
-    } else if (window.authMode === "login") {
+    } else if (mode === "login") {
         if (isExisting) {
-            document.getElementById("auth-message").textContent = Welcome back, ${payload.name}!;
+            document.getElementById("auth-message").textContent = `Welcome back, ${user.displayName}!`;
             showMainScreen();
         } else {
             document.getElementById("auth-message").textContent = "No account found. Please sign up first.";
@@ -27,69 +48,57 @@ function handleCredentialResponse(response) {
     }
 }
 
- // Login Restriction
-app.post("/login", async (req, res) => {
-  try {
-    console.log("Incoming login request:", req.body);
-
-    const token = req.body.idToken;
-    if (!token) {
-      return res.status(400).json({ error: "No token received" });
-    }
-
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID, // ⚠️ must match EXACTLY your Google console client ID
-    });
-
-    const payload = ticket.getPayload();
-    console.log("Verified Google payload:", payload);
-
-    const email = payload.email;
-    const allowedDomain = "icsz.ch";
-
-    if (!email.endsWith("@" + allowedDomain)) {
-      return res.status(403).json({ error: "Access denied. Use your school email." });
-    }
-
-    res.json({
-      success: true,
-      email,
-      name: payload.name,
-      picture: payload.picture
-    });
-
-  } catch (err) {
-    console.error("Login error:", err);
-    res.status(401).json({ error: "Invalid token" });
-  }
-});
-    
-  // Allow login
-  res.json({ success: true, email });
-});
-
+// =============================
+// Show/hide screens
+// =============================
 function showMainScreen() {
     document.getElementById("auth-screen").style.display = "none";
     document.getElementById("main-screen").style.display = "block";
 }
 
+// =============================
+// Button handlers
+// =============================
 window.onload = function () {
-    google.accounts.id.initialize({
-        client_id: CLIENT_ID,
-        callback: handleCredentialResponse,
-        ux_mode: "popup"
-    });
-
     document.getElementById("signUpBtn").addEventListener("click", () => {
         window.authMode = "signup";
-        google.accounts.id.prompt();
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+
+                // ✅ Restrict to @icsz.ch
+                const domain = user.email.split("@")[1];
+                if (domain !== "icsz.ch") {
+                    alert("You must use your school email to sign up.");
+                    signOut(auth);
+                    return;
+                }
+
+                handleLoginResult(user, "signup");
+            })
+            .catch((error) => {
+                console.error("Signup error:", error.message);
+            });
     });
 
     document.getElementById("logInBtn").addEventListener("click", () => {
         window.authMode = "login";
-        google.accounts.id.prompt();
-    });
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+
+                // ✅ Restrict to @icsz.ch
+                const domain = user.email.split("@")[1];
+                if (domain !== "icsz.ch") {
+                    alert("You must use your school email to log in.");
+                    signOut(auth);
+                    return;
+                }
+
+                handleLoginResult(user, "login");
+            })
+            .catch((error) => {
+                console.error("Login error:", error.message);
+            });
+    });
 };
-
-
