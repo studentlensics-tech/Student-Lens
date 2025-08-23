@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Student Lens — Mock</title>
 
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- (Removed) Google Identity Services -->
+  <!-- <script src="https://accounts.google.com/gsi/client" async defer></script> -->
 
   <!-- Fonts / Styles -->
   <link rel="stylesheet" href="style.css">
@@ -176,58 +176,15 @@
 
   </div>
 
-  <!-- Script for Google Login -->
-<script>
-  function handleCredentialResponse(response) {
-    const idToken = response.credential;
-    console.log("Sending token to backend:", idToken);
+  <!-- (Removed) Old inline GIS login script -->
+  <!--
+  <script>
+    ...old Google Identity Services code...
+  </script>
+  -->
 
-    // Send token to backend
-    fetch("/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idToken })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.error) {
-        document.getElementById("auth-message").textContent = data.error;
-      } else {
-        // Success → show main screen
-        document.getElementById("auth-screen").style.display = "none";
-        document.getElementById("main-screen").style.display = "block";
-        document.getElementById("profile-name").innerHTML = data.name;
-        document.getElementById("profile-pic").src = data.picture;
-      }
-    })
-    .catch(err => {
-      console.error("Login error:", err);
-      document.getElementById("auth-message").textContent = "Something went wrong.";
-    });
-  }
+  <!-- Load your Firebase-based JS as a module -->
+  <script type="module" src="script.js"></script>
 
-  window.onload = function () {
-    google.accounts.id.initialize({
-      client_id: "538948576836-1kk0cph50bg3e5ulupjhhjri6nm13snh.apps.googleusercontent.com",
-      callback: handleCredentialResponse
-    });
-
-    document.getElementById("signUpBtn").addEventListener("click", function() {
-      google.accounts.id.prompt();
-    });
-    document.getElementById("logInBtn").addEventListener("click", function() {
-      google.accounts.id.prompt();
-    });
-  };
-</script>
-
-
-
-
-
-
-
-
-
-
-
+</body>
+</html>
