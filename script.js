@@ -117,38 +117,37 @@ onAuthStateChanged(auth, (user) => {
 // Profile Dropdown + Auth UI
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
-  const profileName = document.getElementById("profile-name");
+  const profileBtn = document.getElementById("profile-name"); // it's a button
   const dropdownMenu = document.querySelector(".dropdown-menu");
 
-  // ✅ Toggle dropdown when clicking the profile name
-  if (profileName) {
-    profileName.addEventListener("click", () => {
-      dropdownMenu.classList.toggle("active");
-    });
-
-    // ✅ Close dropdown when clicking outside
-    document.addEventListener("click", (event) => {
-      if (!profileName.contains(event.target) && !dropdownMenu.contains(event.target)) {
-        dropdownMenu.classList.remove("active");
-      }
-    });
-  }
-
-  // ✅ Account button (placeholder action)
-  document.getElementById("accountBtn")?.addEventListener("click", () => {
-    alert("Go to account page...");
-    // Later: window.location.href = "/account.html";
+  // Toggle dropdown when clicking the profile button
+  profileBtn.addEventListener("click", () => {
+    dropdownMenu.classList.toggle("active");
   });
 
-  // ✅ Logout button
+  // Close dropdown if clicked outside
+  document.addEventListener("click", (event) => {
+    if (!profileBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+      dropdownMenu.classList.remove("active");
+    }
+  });
+
+  // Account button click
+  document.getElementById("accountBtn")?.addEventListener("click", () => {
+    alert("Go to account page...");
+  });
+
+  // Logout button
   document.getElementById("logoutBtn")?.addEventListener("click", () => {
-    signOut(auth).then(() => {
-      console.log("User signed out.");
-      document.getElementById("auth-screen").style.display = "flex";
-      document.getElementById("main-screen").style.display = "none";
-    }).catch((error) => {
-      console.error("Sign out error:", error.message);
-    });
+    signOut(auth)
+      .then(() => {
+        console.log("User signed out.");
+        document.getElementById("auth-screen").style.display = "flex";
+        document.getElementById("main-screen").style.display = "none";
+      })
+      .catch((error) => {
+        console.error("Sign out error:", error.message);
+      });
   });
 });
 
@@ -160,13 +159,14 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("auth-screen").style.display = "none";
     document.getElementById("main-screen").style.display = "block";
 
-    // ✅ Update Google name + pic
-    document.getElementById("profile-name").innerHTML = user.displayName || user.email;
+    // Update Google name + pic
+    profileBtn.innerHTML = user.displayName || user.email;
     document.getElementById("profile-pic").src = user.photoURL || "img/IcsBuilding.jpg";
   } else {
     document.getElementById("auth-screen").style.display = "flex";
     document.getElementById("main-screen").style.display = "none";
   }
 });
+
 
 
