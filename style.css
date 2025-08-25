@@ -151,6 +151,19 @@ body {
 .profile { display:flex; align-items:center; gap:10px; color:#333; font-size:12px; text-transform:uppercase; letter-spacing:.6px; }
 .prof-pic { width:34px; height:34px; border-radius:50%; object-fit:cover; border:2px solid #fff; box-shadow:0 1px 0 rgba(0,0,0,.06); }
 
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 60px; /* adjust depending on header height */
+  right: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.dropdown-menu.active {
+  display: block;
+}
+
 /* thin divider */
 .thin-divider {
   height: 4px;
@@ -419,6 +432,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
