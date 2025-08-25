@@ -123,6 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Toggle dropdown when clicking the profile button
   profileBtn.addEventListener("click", () => {
     dropdownMenu.classList.toggle("active");
+
+    // Position dropdown directly under the profile button
+    const rect = profileBtn.getBoundingClientRect();
+    dropdownMenu.style.top = rect.bottom + 6 + "px"; // 6px gap
+    dropdownMenu.style.left = rect.left + "px";
   });
 
   // Close dropdown if clicked outside
@@ -142,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     signOut(auth)
       .then(() => {
         console.log("User signed out.");
+        dropdownMenu.classList.remove("active");
         document.getElementById("auth-screen").style.display = "flex";
         document.getElementById("main-screen").style.display = "none";
       })
@@ -155,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Update profile on login
 // =============================
 onAuthStateChanged(auth, (user) => {
+  const profileBtn = document.getElementById("profile-name"); // ensure in scope
   if (user) {
     document.getElementById("auth-screen").style.display = "none";
     document.getElementById("main-screen").style.display = "block";
@@ -167,6 +174,3 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("main-screen").style.display = "none";
   }
 });
-
-
-
