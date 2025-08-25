@@ -117,7 +117,7 @@ onAuthStateChanged(auth, (user) => {
 // Profile Dropdown + Auth UI
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
-  const profileBtn = document.getElementById("profile-name"); // it's a button
+  const profileBtn = document.getElementById("Profile-btn"); // it's a button
   const dropdownMenu = document.querySelector(".dropdown-menu");
 
   // Toggle dropdown when clicking the profile button
@@ -174,3 +174,4 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("main-screen").style.display = "none";
   }
 });
+
