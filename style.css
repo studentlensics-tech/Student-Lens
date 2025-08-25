@@ -153,12 +153,16 @@ body {
 
 .dropdown-menu {
   display: none;
-  align-items:center;
-  top: 60px; /* adjust depending on header height */
-  right: 20px;
-  background: white;
+  position: absolute; /* position relative to .profile */
+  top: 100%; /* just below the button */
+  left: 0;   /* align left edge with profile button */
+  margin-top: 6px; /* small gap */
+  background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  flex-direction: column; /* stack buttons vertically */
+  min-width: 120px;       /* optional: width of dropdown */
+  z-index: 1000;
 }
 .dropdown-menu.active {
   display: block;
@@ -432,6 +436,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
