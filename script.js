@@ -117,30 +117,30 @@ onAuthStateChanged(auth, (user) => {
 // Profile Dropdown + Auth UI
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
-  const profileBtn = document.querySelector(".profile-btn");
+  const profileName = document.getElementById("profile-name");
   const dropdownMenu = document.querySelector(".dropdown-menu");
 
-  // ✅ Toggle dropdown when profile button clicked
-  if (profileBtn) {
-    profileBtn.addEventListener("click", () => {
+  // ✅ Toggle dropdown when clicking the profile name
+  if (profileName) {
+    profileName.addEventListener("click", () => {
       dropdownMenu.classList.toggle("active");
     });
 
     // ✅ Close dropdown when clicking outside
     document.addEventListener("click", (event) => {
-      if (!profileBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+      if (!profileName.contains(event.target) && !dropdownMenu.contains(event.target)) {
         dropdownMenu.classList.remove("active");
       }
     });
   }
 
-  // ✅ Account button (placeholder)
+  // ✅ Account button (placeholder action)
   document.getElementById("accountBtn")?.addEventListener("click", () => {
     alert("Go to account page...");
     // Later: window.location.href = "/account.html";
   });
 
-  // ✅ Logout button (real Firebase logout)
+  // ✅ Logout button
   document.getElementById("logoutBtn")?.addEventListener("click", () => {
     signOut(auth).then(() => {
       console.log("User signed out.");
