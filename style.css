@@ -153,7 +153,7 @@ body {
 
 .dropdown-menu {
   display: none;
-  position: absolute; /* position relative to .profile */
+   align-items:center;
   top: 100%; /* just below the button */
   left: 0;   /* align left edge with profile button */
   margin-top: 6px; /* small gap */
@@ -436,6 +436,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
