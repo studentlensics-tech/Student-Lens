@@ -111,3 +111,62 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("main-screen").style.display = "none";
   }
 });
+
+
+// =============================
+// Profile Dropdown + Auth UI
+// =============================
+document.addEventListener("DOMContentLoaded", () => {
+  const profileBtn = document.querySelector(".profile-btn");
+  const dropdownMenu = document.querySelector(".dropdown-menu");
+
+  // ✅ Toggle dropdown when profile button clicked
+  if (profileBtn) {
+    profileBtn.addEventListener("click", () => {
+      dropdownMenu.classList.toggle("active");
+    });
+
+    // ✅ Close dropdown when clicking outside
+    document.addEventListener("click", (event) => {
+      if (!profileBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.classList.remove("active");
+      }
+    });
+  }
+
+  // ✅ Account button (placeholder)
+  document.getElementById("accountBtn")?.addEventListener("click", () => {
+    alert("Go to account page...");
+    // Later: window.location.href = "/account.html";
+  });
+
+  // ✅ Logout button (real Firebase logout)
+  document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    signOut(auth).then(() => {
+      console.log("User signed out.");
+      document.getElementById("auth-screen").style.display = "flex";
+      document.getElementById("main-screen").style.display = "none";
+    }).catch((error) => {
+      console.error("Sign out error:", error.message);
+    });
+  });
+});
+
+// =============================
+// Update profile on login
+// =============================
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById("auth-screen").style.display = "none";
+    document.getElementById("main-screen").style.display = "block";
+
+    // ✅ Update Google name + pic
+    document.getElementById("profile-name").innerHTML = user.displayName || user.email;
+    document.getElementById("profile-pic").src = user.photoURL || "img/IcsBuilding.jpg";
+  } else {
+    document.getElementById("auth-screen").style.display = "flex";
+    document.getElementById("main-screen").style.display = "none";
+  }
+});
+
+
