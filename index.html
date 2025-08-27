@@ -9,49 +9,49 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* Times New Roman everywhere */
-    body {
-      font-family: "Times New Roman", Times, serif !important;
+    /* Times New Roman absolutely everywhere */
+    * { font-family: "Times New Roman", Times, serif !important; }
+
+    /* --- header layout fixes --- */
+    .site-header{ display:flex; align-items:center; gap:16px; }
+    .header-left{ display:flex; align-items:flex-end; gap:14px; }
+    .header-right{ margin-left:auto; }   /* pushes Home/profile fully to the right */
+
+    /* make the thin dividers show full width (they sit OUTSIDE the flex header) */
+    .thin-divider{
+      display:block;
+      height:4px;
+      border-top:1px solid rgba(0,0,0,.08);
+      border-bottom:1px solid rgba(255,255,255,.6);
+      max-width:1160px;
+      margin:0 auto;
     }
 
-    /* Search bar with icon inside */
-    .searchgroup {
-      position: relative;
-      display: inline-block;
+    /* --- Search: underline field with an icon --- */
+    .searchgroup{ position:relative; display:inline-block; }
+    .searchgroup .icon-search{
+      position:absolute; left:0; top:50%; transform:translateY(-50%);
+      width:18px; height:18px; color:#6b7a7e; pointer-events:none;
     }
-    .searchgroup .icon-search {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
-      pointer-events: none;
-      color: #666;
+    #site-search{
+      appearance:none; background:transparent; outline:none;
+      border:none; border-bottom:2px solid #d6dee2;
+      padding:6px 0 6px 26px; width:240px; font-size:16px;
+      transition:border-color .2s ease, box-shadow .2s ease;
     }
-    #site-search {
-      padding: 6px 10px 6px 32px; /* makes room for icon */
-      border-radius: 20px;
-      border: 1px solid #444;
-    }
-    /* Stack home button above profile */
-    .right-stack {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-    }
-    /* Hide visible label but keep accessible */
-    .visually-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+    #site-search::placeholder{ color:#9aa4a8; }
+    #site-search:focus{ border-bottom-color:#203f3a; box-shadow:inset 0 -2px 0 #203f3a; }
+
+    /* Date sits next to the search (not inside the input block) */
+    .top-date{ font-weight:700; color:#2c4141; font-size:16px; line-height:1; }
+
+    /* stack home above profile (as you had) and keep it right-aligned */
+    .right-stack{ display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+
+    /* a11y helper */
+    .visually-hidden{
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
     }
   </style>
 </head>
@@ -95,15 +95,15 @@
       <!-- LEFT: search + date -->
       <div class="header-left">
         <div class="searchgroup">
-          <!-- hidden label for accessibility -->
           <label for="site-search" class="visually-hidden">Search</label>
-          <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
             <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"/>
           </svg>
           <input type="search" id="site-search" placeholder="Search..." />
-          <span class="top-date" id="currentDate"></span>
         </div>
+        <!-- date is OUTSIDE the searchgroup so it shows cleanly -->
+        <span class="top-date" id="currentDate"></span>
       </div>
 
       <!-- CENTER: title -->
@@ -113,7 +113,7 @@
       <div class="header-right">
         <div class="right-stack">
           <a class="home-link" href="#" id="homeLink" title="Home">
-            <svg class="icon-home" viewBox="0 0 24 24" aria-hidden="true">
+            <svg class="icon-home" viewBox="0 0 24 24" aria-hidden="true" style="width:22px;height:22px;margin-right:6px;">
               <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5z"
                     fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
             </svg>
@@ -141,10 +141,11 @@
           </div>
         </div>
       </div>
-
-      <div class="thin-divider"></div>
-      <div class="thin-divider"></div>
     </header>
+
+    <!-- the two visible separators live OUTSIDE the flex header -->
+    <div class="thin-divider"></div>
+    <div class="thin-divider"></div>
 
     <!-- MAIN LAYOUT -->
     <main class="layout">
@@ -254,5 +255,16 @@
 
   <!-- Scripts -->
   <script type="module" src="script.js"></script>
+
+  <!-- inline tiny helper to populate the date -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const el = document.getElementById('currentDate');
+      if (el) {
+        const d = new Date();
+        el.textContent = d.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+    });
+  </script>
 </body>
 </html>
