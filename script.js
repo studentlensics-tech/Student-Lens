@@ -121,8 +121,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const dropdownMenu = document.querySelector(".dropdown-menu");
 
   // Toggle dropdown when clicking the profile button
-  profileBtn.addEventListener("click", () => {
-    dropdownMenu.classList.toggle("active");
+  profileBtn.addEventListener("click", (event) => {
+  event.stopPropagation(); // prevent closing immediately
+  dropdownMenu.classList.toggle("active");
+
+  // Position relative to profile button
+  const rect = profileBtn.getBoundingClientRect();
+  dropdownMenu.style.top = rect.bottom + window.scrollY + 8 + "px";
+  dropdownMenu.style.left = rect.right - dropdownMenu.offsetWidth + "px";
+});
+
+// Close dropdown if clicking outside
+document.addEventListener("click", (event) => {
+  if (!profileBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+    dropdownMenu.classList.remove("active");
+  }
+});
+
 
     // Position dropdown directly under the profile button
     const rect = profileBtn.getBoundingClientRect();
@@ -174,4 +189,5 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("main-screen").style.display = "none";
   }
 });
+
 
