@@ -117,60 +117,39 @@ onAuthStateChanged(auth, (user) => {
 // Profile Dropdown + Auth UI
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
-  const profileBtn = document.getElementById("Profile-btn"); // it's a button
-  const dropdownMenu = document.querySelector(".dropdown-menu");
+  const profileBtn   = document.getElementById("Profile-btn");
+  const dropdownMenu = document.getElementById("profileDropdown");
 
-  // Toggle dropdown when clicking the profile button
-  profileBtn.addEventListener("click", (event) => {
-  event.stopPropagation(); // prevent closing immediately
-  dropdownMenu.classList.toggle("active");
-
-  // Position relative to profile button
-  const rect = profileBtn.getBoundingClientRect();
-  dropdownMenu.style.top = rect.bottom + window.scrollY + 8 + "px";
-  dropdownMenu.style.left = rect.right - dropdownMenu.offsetWidth + "px";
-});
-
-// Close dropdown if clicking outside
-document.addEventListener("click", (event) => {
-  if (!profileBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
-    dropdownMenu.classList.remove("active");
-  }
-});
-
-
-    // Position dropdown directly under the profile button
-    const rect = profileBtn.getBoundingClientRect();
-    dropdownMenu.style.top = rect.bottom + 6 + "px"; // 6px gap
-    dropdownMenu.style.left = rect.left + "px";
+  // Toggle dropdown
+  profileBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isOpen = dropdownMenu.classList.toggle("active");
+    profileBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
   });
 
-  // Close dropdown if clicked outside
-  document.addEventListener("click", (event) => {
-    if (!profileBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+  // Close on outside click
+  document.addEventListener("click", () => {
+    if (dropdownMenu.classList.contains("active")) {
       dropdownMenu.classList.remove("active");
+      profileBtn.setAttribute("aria-expanded", "false");
     }
   });
 
-  // Account button click
+  // Buttons
   document.getElementById("accountBtn")?.addEventListener("click", () => {
-    alert("Go to account page...");
+    // TODO: route to your account page
+    alert("Go to account page…");
+    dropdownMenu.classList.remove("active");
+    profileBtn.setAttribute("aria-expanded", "false");
   });
 
-  // Logout button
   document.getElementById("logoutBtn")?.addEventListener("click", () => {
-    signOut(auth)
-      .then(() => {
-        console.log("User signed out.");
-        dropdownMenu.classList.remove("active");
-        document.getElementById("auth-screen").style.display = "flex";
-        document.getElementById("main-screen").style.display = "none";
-      })
-      .catch((error) => {
-        console.error("Sign out error:", error.message);
-      });
+    signOut(auth).catch((err) => console.error("Sign out error:", err.message));
+    dropdownMenu.classList.remove("active");
+    profileBtn.setAttribute("aria-expanded", "false");
   });
 });
+
 
 // =============================
 // Update profile on login
@@ -189,5 +168,6 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("main-screen").style.display = "none";
   }
 });
+
 
 
