@@ -5,21 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Student Lens — Mock</title>
 
-  <!-- (Removed) Google Identity Services -->
-  <!-- <script src="https://accounts.google.com/gsi/client" async defer></script> -->
-
   <!-- Fonts / Styles -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <!-- LOGIN / SIGNUP SCREEN -->
- <div id="auth-screen" style="position: relative; height: 100vh; width: 100%; display: flex;">
+  <div id="auth-screen" style="position: relative; height: 100vh; width: 100%; display: flex;">
 
-  <!-- Background image -->
-  <img src="img/Dark.jpg" 
-       alt="Background" 
-       style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1;">
+    <!-- Background image -->
+    <img src="img/Dark.jpg" 
+         alt="Background" 
+         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1;">
 
     <div class="auth-left">
       <h1>WELCOME TO THE<br>STUDENT LENS<br>WEBSITE</h1>
@@ -46,48 +43,55 @@
   <!-- MAIN STUDENT LENS PAGE -->
   <div id="main-screen" style="display:none;">
 
-    <!-- top header -->
+    <!-- HEADER -->
     <header class="site-header">
+      <!-- LEFT: search + date -->
       <div class="header-left">
-        <div class="searchwrap">
-          <svg class="icon-search" viewBox="0 0 24 24" aria-hidden><path d="M21 21l-4.35-4.35"></path></svg>
-          <input type="search" placeholder="Search" aria-label="Search">
+        <div class="searchgroup">
+          <label class="searchlabel" for="site-search">
+            <svg class="icon-search" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"></circle>
+              <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="currentColor" stroke-width="2"></line>
+            </svg>
+            <span>Search</span>
+          </label>
+          <input id="site-search" type="search" placeholder="Search" autocomplete="off" />
+          <div class="top-date" id="top-date" aria-live="polite"></div>
         </div>
-        <div class="top-date">17th May, 2025</div>
       </div>
 
+      <!-- CENTER: title -->
       <div class="site-title">STUDENT LENS</div>
 
-      
+      <!-- RIGHT: Home + Profile (with dropdown) -->
       <div class="header-right">
-  <div>Home</div>
+        <a class="home-link" href="#" id="homeLink" title="Home">
+          <svg class="icon-home" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5z" 
+                  fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <span>Home</span>
+        </a>
 
-  <!-- anchors dropdown positioning -->
-  <div class="profile-wrapper">
-    <button type="button" class="profile" id="Profile-btn" aria-expanded="false" aria-controls="profileDropdown">
-      <img id="profile-pic" src="img/IcsBuilding.jpg" alt="Profile Picture" class="prof-pic">
-      <span id="profile-name" class="profile-name">Loading...</span>
-      <span class="chevron">▼</span>
-    </button>
-
-    <!-- dropdown lives INSIDE the header, under the profile -->
-    <div class="dropdown-menu" id="profileDropdown" role="menu" aria-hidden="true">
-      <button type="button" id="accountBtn" class="dropdown-item">ACCOUNT SETTINGS</button>
-      <hr class="dropdown-sep">
-      <button type="button" id="logoutBtn" class="dropdown-item danger">LOG OUT</button>
-    </div>
-  </div>
-</div>
-
-    </header>
-   <div class="dropdown-menu">
-            <button id="accountBtn" class="dropdown-btn white-btn">Account</button>
-            <button id="logoutBtn" class="dropdown-btn red-btn">Logout</button>
+        <div class="profile-wrapper">
+          <button type="button" class="profile" id="Profile-btn" aria-expanded="false" aria-controls="profileDropdown">
+            <img id="profile-pic" src="img/IcsBuilding.jpg" alt="Profile Picture" class="prof-pic">
+            <span id="profile-name" class="profile-name">Loading...</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="dropdown-menu" id="profileDropdown" role="menu" aria-hidden="true">
+            <button type="button" id="accountBtn" class="dropdown-item">ACCOUNT SETTINGS</button>
+            <hr class="dropdown-sep">
+            <button type="button" id="logoutBtn" class="dropdown-item danger">LOG OUT</button>
           </div>
+        </div>
+      </div>
+    </header>
+
     <div class="thin-divider"></div>
     <div class="thin-divider"></div>
 
-    <!-- main layout -->
+    <!-- MAIN LAYOUT -->
     <main class="layout">
       <!-- left games column -->
       <aside class="col col-left">
@@ -183,7 +187,7 @@
       </aside>
     </main>
 
-    <!-- footer bar -->
+    <!-- FOOTER -->
     <footer class="site-footer">
       <div class="footer-inner">
         <div class="footer-left">THE STUDENT LENS</div>
@@ -193,27 +197,7 @@
 
   </div>
 
-  <!-- (Removed) Old inline GIS login script -->
-  <!--
-  <script>
-    ...old Google Identity Services code...
-  </script>
-  -->
-
-  <!-- Load your Firebase-based JS as a module -->
+  <!-- Scripts -->
   <script type="module" src="script.js"></script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
