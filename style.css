@@ -151,23 +151,53 @@ body {
 .profile { position:relative; display:flex; align-items:center; gap:10px; color:#333; font-size:12px; text-transform:uppercase; letter-spacing:.6px; border:0px; border-radius:15%; }
 .prof-pic { width:34px; height:34px; border-radius:50%; object-fit:cover; border:2px solid #fff; box-shadow:0 1px 0 rgba(0,0,0,.06); }
 
-/* Dropdown menu styling */
+/* Let the dropdown anchor itself to the profile area */
+.profile-wrapper { position: relative; }
+
+/* Dropdown panel */
 .dropdown-menu {
   position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
   display: none;
-  flex-direction: column;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  min-width: 180px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   padding: 8px 0;
+  min-width: 220px;
   z-index: 1000;
   font-family: "Times New Roman", serif;
 }
 
-.dropdown-menu.active {
-  display: flex;
+.dropdown-menu.active { display: block; }
+
+.dropdown-item {
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  background: none;
+  border: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  color: #203f3a;
+  cursor: pointer;
 }
+
+.dropdown-item:hover { background: #f3f3f3; }
+
+.dropdown-item.danger { color: #9d1414; }
+.dropdown-item.danger:hover { background: #ffecec; }
+
+.dropdown-sep {
+  border: 0;
+  border-top: 1px solid #e8e8e8;
+  margin: 6px 0;
+}
+
+.chevron { font-size: 10px; margin-left: 6px; }
+
 
 .dropdown-btn {
   padding: 10px 16px;
@@ -467,6 +497,7 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
