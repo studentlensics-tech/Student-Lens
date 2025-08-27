@@ -641,7 +641,7 @@ body {
 /* Date sits directly under the input, left-aligned */
 .site-header .top-date{
   display: block;
-  margin-top: 15px;
+  margin-top: 40px;
   font-size: 16px;
   font-weight: 700;
   color: #2c4141;
@@ -663,6 +663,25 @@ body {
   border-bottom: 1px solid rgba(255,255,255,.6);
   max-width: 1160px;
   margin: 0 auto;
+}
+
+/* Center the title perfectly regardless of left/right widths */
+.site-header {
+  position: relative;  /* allow absolute centering */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 28px;
+}
+
+/* Force title dead-center */
+.site-header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
 }
 
 
