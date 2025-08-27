@@ -169,5 +169,44 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+// ===== Header: live date + Home behavior =====
+function ordinal(n) {
+  const s = ["th", "st", "nd", "rd"], v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+function formatTopDate(d) {
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  return `${ordinal(d.getDate())} ${months[d.getMonth()]}, ${d.getFullYear()}`;
+}
+function updateTopDate() {
+  const el = document.getElementById("top-date");
+  if (el) el.textContent = formatTopDate(new Date());
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Set date now
+  updateTopDate();
+
+  // Refresh at midnight
+  const now = new Date();
+  const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  setTimeout(() => {
+    updateTopDate();
+    setInterval(updateTopDate, 24 * 60 * 60 * 1000);
+  }, nextMidnight - now);
+
+  // Home click: keep user on the main view and scroll to top
+  const homeLink = document.getElementById("homeLink");
+  if (homeLink) {
+    homeLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("main-screen")?.scrollIntoView({ behavior: "smooth" });
+      // If you want to truly navigate: window.location.href = "/";
+    });
+  }
+});
+
+
+
 
 
