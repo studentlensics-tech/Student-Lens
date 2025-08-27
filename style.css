@@ -497,46 +497,72 @@ body {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+/* Anchor dropdown positioning (you already have this, but keep it) */
+.profile-wrapper { position: relative; }
 
+/* Search block */
+.searchgroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
 
+.searchlabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #2c4141;
+  opacity: 0.9;
+  user-select: none;
+}
 
+.icon-search {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
 
+/* Underline-style search input */
+#site-search {
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #d6dee2;
+  outline: none;
+  padding: 6px 0;
+  width: 220px;       /* adjust if you want longer */
+  font-size: 16px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+#site-search::placeholder { color: #9aa4a8; }
+#site-search:focus {
+  border-bottom-color: #203f3a;
+  box-shadow: inset 0 -2px 0 #203f3a;
+}
 
+/* Date below the search */
+.top-date {
+  margin-top: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2c4141;
+}
 
+/* Home link on the right */
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #203f3a;
+  font-weight: 600;
+}
+.home-link:hover { background: #eef3f2; }
+.icon-home { width: 22px; height: 22px; display: inline-block; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Optional: tighten right group spacing a bit */
+.header-right { gap: 14px; }
