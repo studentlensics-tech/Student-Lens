@@ -61,13 +61,23 @@
       
       <div class="header-right">
   <div>Home</div>
+
+  <!-- anchors dropdown positioning -->
   <div class="profile-wrapper">
-    <button class="profile" id="Profile-btn">
+    <button type="button" class="profile" id="Profile-btn" aria-expanded="false" aria-controls="profileDropdown">
       <img id="profile-pic" src="img/IcsBuilding.jpg" alt="Profile Picture" class="prof-pic">
-      <div id="profile-name" class="profile-name">Loading...</div>
-      <!-- optional ▼ chevron -->
+      <span id="profile-name" class="profile-name">Loading...</span>
       <span class="chevron">▼</span>
     </button>
+
+    <!-- dropdown lives INSIDE the header, under the profile -->
+    <div class="dropdown-menu" id="profileDropdown" role="menu" aria-hidden="true">
+      <button type="button" id="accountBtn" class="dropdown-item">ACCOUNT SETTINGS</button>
+      <hr class="dropdown-sep">
+      <button type="button" id="logoutBtn" class="dropdown-item danger">LOG OUT</button>
+    </div>
+  </div>
+</div>
 
     </header>
    <div class="dropdown-menu">
@@ -195,6 +205,7 @@
 
 </body>
 </html>
+
 
 
 
