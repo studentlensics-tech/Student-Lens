@@ -151,19 +151,53 @@ body {
 .profile { position:relative; display:flex; align-items:center; gap:10px; color:#333; font-size:12px; text-transform:uppercase; letter-spacing:.6px; border:0px; border-radius:15%; }
 .prof-pic { width:34px; height:34px; border-radius:50%; object-fit:cover; border:2px solid #fff; box-shadow:0 1px 0 rgba(0,0,0,.06); }
 
-dropdown-menu {
-  position: absolute; /* absolute positioning in the page */
+/* Dropdown menu styling */
+.dropdown-menu {
+  position: absolute;
   display: none;
   flex-direction: column;
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  min-width: 140px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 180px;
+  padding: 8px 0;
   z-index: 1000;
+  font-family: "Times New Roman", serif;
 }
+
 .dropdown-menu.active {
-  display: block;
+  display: flex;
 }
+
+.dropdown-btn {
+  padding: 10px 16px;
+  text-align: left;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #203f3a;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdown-btn:hover {
+  background: #f3f3f3;
+}
+
+.dropdown-btn.red-btn {
+  color: #b30000;
+}
+
+.dropdown-btn.red-btn:hover {
+  background: #ffecec;
+}
+
+.chevron {
+  font-size: 10px;
+  margin-left: 6px;
+}
+
 
 /* thin divider */
 .thin-divider {
@@ -433,6 +467,7 @@ dropdown-menu {
      .site-footer{ position:static; margin-top:30px; border-top: 3px solid rgba(0,0,0,.04); }
    }
    
+
 
 
 
