@@ -46,47 +46,53 @@
     <!-- HEADER -->
     <header class="site-header">
       <!-- LEFT: search + date -->
-      <div class="header-left">
-        <div class="searchgroup">
-          <label class="searchlabel" for="site-search">
-            <svg class="icon-search" viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"></circle>
-              <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="currentColor" stroke-width="2"></line>
-            </svg>
-            <span>Search</span>
-          </label>
-          <input id="site-search" type="search" placeholder="Search" autocomplete="off" />
-          <div class="top-date" id="top-date" aria-live="polite"></div>
-        </div>
-      </div>
+<div class="header-left">
+  <div class="searchgroup">
+    <label for="site-search" class="searchlabel">
+      <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </label>
+    <input type="search" id="site-search" placeholder="Search..." />
+    <span class="top-date" id="currentDate"></span>
+  </div>
+</div>
 
       <!-- CENTER: title -->
       <div class="site-title">STUDENT LENS</div>
 
-      <!-- RIGHT: Home + Profile (with dropdown) -->
-      <div class="header-right">
-        <a class="home-link" href="#" id="homeLink" title="Home">
-          <svg class="icon-home" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5z" 
-                  fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-          </svg>
-          <span>Home</span>
-        </a>
+<div class="header-right">
+  <div class="right-stack">
+    <a class="home-link" href="#" id="homeLink" title="Home">
+      <svg class="icon-home" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5z"
+              fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span>Home</span>
+    </a>
 
-        <div class="profile-wrapper">
-          <button type="button" class="profile" id="Profile-btn" aria-expanded="false" aria-controls="profileDropdown">
-            <img id="profile-pic" src="img/IcsBuilding.jpg" alt="Profile Picture" class="prof-pic">
-            <span id="profile-name" class="profile-name">Loading...</span>
-            <span class="chevron">▼</span>
-          </button>
-          <div class="dropdown-menu" id="profileDropdown" role="menu" aria-hidden="true">
-            <button type="button" id="accountBtn" class="dropdown-item">ACCOUNT SETTINGS</button>
-            <hr class="dropdown-sep">
-            <button type="button" id="logoutBtn" class="dropdown-item danger">LOG OUT</button>
-          </div>
-        </div>
+    <div class="profile-wrapper">
+      <button type="button" class="profile" id="Profile-btn"
+              aria-expanded="false" aria-controls="profileDropdown">
+        <img id="profile-pic" src="img/IcsBuilding.jpg"
+             alt="Profile Picture" class="prof-pic">
+        <span id="profile-name" class="profile-name">Loading...</span>
+        <span class="chevron">▼</span>
+      </button>
+      <div class="dropdown-menu" id="profileDropdown"
+           role="menu" aria-hidden="true">
+        <button type="button" id="accountBtn" class="dropdown-item">
+          ACCOUNT SETTINGS
+        </button>
+        <hr class="dropdown-sep">
+        <button type="button" id="logoutBtn" class="dropdown-item danger">
+          LOG OUT
+        </button>
       </div>
-    </header>
+    </div>
+  </div>
+</div>
 
     <div class="thin-divider"></div>
     <div class="thin-divider"></div>
@@ -201,3 +207,4 @@
   <script type="module" src="script.js"></script>
 </body>
 </html>
+
