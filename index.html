@@ -58,13 +58,23 @@
 
       <div class="site-title">STUDENT LENS</div>
 
+      
       <div class="header-right">
-            <div>Home</div>
-          <button class="profile" id="Profile-btn">
-              <img id="profile-pic" src="img/IcsBuilding.jpg" alt="Profile Picture" class="prof-pic">
-            <div id="profile-name" class="profile-name">Loading...</budivtton>
-          </button>
-      </div> 
+  <div>Home</div>
+  <div class="profile-wrapper">
+    <button class="profile" id="Profile-btn">
+      <img id="profile-pic" src="img/IcsBuilding.jpg" alt="Profile Picture" class="prof-pic">
+      <div id="profile-name" class="profile-name">Loading...</div>
+      <!-- optional ▼ chevron -->
+      <span class="chevron">▼</span>
+    </button>
+    <div class="dropdown-menu" id="profileDropdown">
+      <button id="accountBtn" class="dropdown-btn">Account Settings</button>
+      <button id="logoutBtn" class="dropdown-btn red-btn">Log Out</button>
+    </div>
+  </div>
+</div>
+
     </header>
    <div class="dropdown-menu">
             <button id="accountBtn" class="dropdown-btn white-btn">Account</button>
@@ -191,6 +201,7 @@
 
 </body>
 </html>
+
 
 
 
