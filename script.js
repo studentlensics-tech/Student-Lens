@@ -87,7 +87,7 @@ onAuthStateChanged(auth, (user) => {
     showMainScreen(user);
   } else {
     console.log("⛔ No user → redirecting to login");
-    window.location.replace("login.html");
+    location.replace("login.html");
   }
 });
 
