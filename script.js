@@ -22,8 +22,12 @@ const auth = getAuth(app);
 // =============================
 function showMainScreen(user) {
   document.getElementById("main-screen").style.display = "block";
-  document.getElementById("profile-name").textContent = user.displayName || user.email;
-  document.getElementById("profile-pic").src = user.photoURL || "img/IcsBuilding.jpg";
+
+  const nameEl = document.getElementById("profile-name");
+  if (nameEl) nameEl.textContent = user.displayName || user.email;
+
+  const picEl = document.getElementById("profile-pic");
+  if (picEl) picEl.src = user.photoURL || "img/IcsBuilding.jpg";
 }
 
 function redirectToLogin() {
@@ -38,28 +42,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const profileBtn   = document.getElementById("Profile-btn");
   const dropdownMenu = document.getElementById("profileDropdown");
 
-  profileBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const isOpen = dropdownMenu.classList.toggle("active");
-    profileBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
-  });
+  if (profileBtn && dropdownMenu) {
+    profileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = dropdownMenu.classList.toggle("active");
+      profileBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
 
-  document.addEventListener("click", () => {
-    dropdownMenu.classList.remove("active");
-    profileBtn.setAttribute("aria-expanded", "false");
-  });
+    document.addEventListener("click", () => {
+      dropdownMenu.classList.remove("active");
+      profileBtn.setAttribute("aria-expanded", "false");
+    });
+  }
 
   // Account page link
-  document.getElementById("accountBtn").addEventListener("click", () => {
-    window.location.href = "account.html";
-  });
+  const accountBtn = document.getElementById("accountBtn");
+  if (accountBtn) {
+    accountBtn.addEventListener("click", () => {
+      window.location.href = "account.html";
+    });
+  }
 
   // Logout
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    signOut(auth).catch((err) => console.error("Sign out error:", err.message));
-    dropdownMenu.classList.remove("active");
-    profileBtn.setAttribute("aria-expanded", "false");
-  });
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth).catch((err) => console.error("Sign out error:", err.message));
+      if (dropdownMenu) dropdownMenu.classList.remove("active");
+      if (profileBtn) profileBtn.setAttribute("aria-expanded", "false");
+    });
+  }
 
   // Home button
   const homeLink = document.getElementById("homeLink");
@@ -74,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // =============================
 // Auth state persistence
 // =============================
+// IMPORTANT: Wait for Firebase to confirm before redirecting
 onAuthStateChanged(auth, (user) => {
   if (user) {
     showMainScreen(user);
