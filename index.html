@@ -56,36 +56,13 @@
   </style>
 </head>
 <body>
-
-  <!-- LOGIN / SIGNUP SCREEN -->
-  <div id="auth-screen" style="position: relative; height: 100vh; width: 100%; display: flex;">
-
-    <!-- Background image -->
-    <img src="img/Dark.jpg" 
-         alt="Background" 
-         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1;">
-
-    <div class="auth-left">
-      <h1>WELCOME TO THE<br>STUDENT LENS<br>WEBSITE</h1>
-    </div>
-    <div class="auth-right">
-      <div class="card">
-        <p>If you are new to the website, please click here:</p>
-        <button id="signUpBtn" class="google-btn">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"/>
-          Sign up with Google
-        </button>
-      </div>
-      <div class="card">
-        <p>If you are returning to the website, please click here:</p>
-        <button id="logInBtn" class="google-btn">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"/>
-          Log in with Google
-        </button>
-      </div>
-      <div id="auth-message"></div>
-    </div>
-  </div>
+  
+<script>
+  const isLoggedIn = localStorage.getItem("user");
+  if (!isLoggedIn) {
+    window.location.href = "login.html";
+  }
+</script>
 
   <!-- MAIN STUDENT LENS PAGE -->
   <div id="main-screen" style="display:none;">
@@ -268,5 +245,6 @@
   </script>
 </body>
 </html>
+
 
 
