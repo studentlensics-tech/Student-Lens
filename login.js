@@ -20,45 +20,38 @@ const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Wait for Firebase to finish restoring session (no racing)
-function authReady() {
-  return new Promise((resolve) => {
-    const unsub = onAuthStateChanged(auth, (u) => { unsub(); resolve(u); });
-  });
-}
-
 // =============================
 // Page boot
 // =============================
-document.addEventListener("DOMContentLoaded", async () => {
-  // 1) Only decide after Firebase is ready
-  const user = await authReady();
+document.addEventListener("DOMContentLoaded", () => {
+  // 1) Wait for Firebase to resolve state
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Already signed in → straight to app
+      location.replace("index.html");
+      return;
+    }
 
-  if (user) {
-    // Already signed in → go straight to app (no back-loop)
-    location.replace("index.html");
-    return;
-  }
+    // 2) Not signed in → wire up buttons
+    const signUpBtn = document.getElementById("signUpBtn");
+    const logInBtn  = document.getElementById("logInBtn");
 
-  // 2) Not signed in → wire up buttons
-  const signUpBtn = document.getElementById("signUpBtn");
-  const logInBtn  = document.getElementById("logInBtn");
+    function handleSignIn(mode) {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const u = result.user;
+          const domain = (u.email || "").split("@")[1];
+          if (domain !== "icsz.ch") {
+            alert("You must use your school email.");
+            return signOut(auth);
+          }
+          // Success → jump to app
+          location.replace("index.html");
+        })
+        .catch((err) => console.error(`${mode} error:`, err));
+    }
 
-  function handleSignIn(mode) {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const u = result.user;
-        const domain = (u.email || "").split("@")[1];
-        if (domain !== "icsz.ch") {
-          alert("You must use your school email.");
-          return signOut(auth);
-        }
-        // Success → jump to app
-        location.replace("index.html");
-      })
-      .catch((err) => console.error(`${mode} error:`, err));
-  }
-
-  signUpBtn?.addEventListener("click", () => handleSignIn("signup"));
-  logInBtn?.addEventListener("click", () => handleSignIn("login"));
+    signUpBtn?.addEventListener("click", () => handleSignIn("signup"));
+    logInBtn?.addEventListener("click", () => handleSignIn("login"));
+  });
 });
