@@ -1,5 +1,5 @@
 // =============================
-// Firebase (shared config)
+/// Firebase (shared config)
 // =============================
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {
