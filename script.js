@@ -14,7 +14,7 @@ const firebaseConfig = {
   measurementId: "G-V3YBM8DZXW"
 };
 
-const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // =============================
@@ -22,12 +22,8 @@ const auth = getAuth(app);
 // =============================
 function showMainScreen(user) {
   document.getElementById("main-screen").style.display = "block";
-
-  const nameEl = document.getElementById("profile-name");
-  if (nameEl) nameEl.textContent = user.displayName || user.email;
-
-  const picEl = document.getElementById("profile-pic");
-  if (picEl) picEl.src = user.photoURL || "img/IcsBuilding.jpg";
+  document.getElementById("profile-name").textContent = user.displayName || user.email;
+  document.getElementById("profile-pic").src = user.photoURL || "img/IcsBuilding.jpg";
 }
 
 function redirectToLogin() {
@@ -38,7 +34,6 @@ function redirectToLogin() {
 // DOM Ready
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
-  // Profile dropdown
   const profileBtn   = document.getElementById("Profile-btn");
   const dropdownMenu = document.getElementById("profileDropdown");
 
@@ -55,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Account page link
+  // Account page
   const accountBtn = document.getElementById("accountBtn");
   if (accountBtn) {
     accountBtn.addEventListener("click", () => {
@@ -68,8 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       signOut(auth).catch((err) => console.error("Sign out error:", err.message));
-      if (dropdownMenu) dropdownMenu.classList.remove("active");
-      if (profileBtn) profileBtn.setAttribute("aria-expanded", "false");
     });
   }
 
@@ -86,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
 // =============================
 // Auth state persistence
 // =============================
-// IMPORTANT: Wait for Firebase to confirm before redirecting
 onAuthStateChanged(auth, (user) => {
   if (user) {
     showMainScreen(user);
