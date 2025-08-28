@@ -136,11 +136,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Buttons
-  document.getElementById("accountBtn").addEventListener("click", () => {
-  window.location.href = "account.html"; // change to your real page
-    dropdownMenu.classList.remove("active");
-    profileBtn.setAttribute("aria-expanded", "false");
-  });
+ document.getElementById("accountBtn").addEventListener("click", () => {
+  window.location.href = "https://username.github.io/Student-Lens/account.html";
+});
 
   document.getElementById("logoutBtn")?.addEventListener("click", () => {
     signOut(auth).catch((err) => console.error("Sign out error:", err.message));
@@ -204,6 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
