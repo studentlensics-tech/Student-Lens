@@ -1,5 +1,10 @@
+// =============================
+// Firebase Setup
+// =============================
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { 
+  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAsGS-W7EZ_ZX7Cgv_ZxwOLZkp-u8ilaRQ",
@@ -11,14 +16,17 @@ const firebaseConfig = {
   measurementId: "G-V3YBM8DZXW"
 };
 
-const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+// =============================
+// Login Handlers
+// =============================
 function handleSignIn(mode) {
   signInWithPopup(auth, provider)
     .then((result) => {
-      const user = result.user;
+      const user   = result.user;
       const domain = user.email.split("@")[1];
 
       if (domain !== "icsz.ch") {
@@ -27,27 +35,31 @@ function handleSignIn(mode) {
         return;
       }
 
-      // Redirect after successful sign-in
-      window.location.href = "index.html";
+      console.log(`Signed in as ${user.displayName || user.email}`);
+      window.location.href = "index.html"; // ✅ go to main app
     })
     .catch((error) => {
       console.error(`${mode} error:`, error.message);
     });
 }
 
+// =============================
+// DOM Ready
+// =============================
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("signUpBtn").addEventListener("click", () => handleSignIn("signup"));
   document.getElementById("logInBtn").addEventListener("click", () => handleSignIn("login"));
 });
 
-// If already logged in, seamless redirect to index
+// =============================
+// Auth state persistence
+// =============================
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    const domain = user.email.split("@")[1];
-    if (domain === "icsz.ch") {
-      window.location.href = "index.html";
-    } else {
-      signOut(auth);
-    }
+    // already logged in → jump straight to main app
+    window.location.href = "index.html";
+  } else {
+    // stay on login screen
+    console.log("Not signed in, waiting for user action.");
   }
 });
