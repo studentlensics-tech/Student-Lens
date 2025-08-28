@@ -202,20 +202,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Home click: keep user on the main view and scroll to top
   const homeLink = document.getElementById("homeLink");
-  if (homeLink) {
-    homeLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      document.getElementById("main-screen")?.scrollIntoView({ behavior: "smooth" });
-      // If you want to truly navigate: window.location.href = "/";
-    });
-  }
-});
-
-
-
-
-
-
-
-
-
+if (homeLink) {
+  homeLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (auth.currentUser) {
+      document.getElementById("auth-screen").style.display = "none";
+      document.getElementById("main-screen").style.display = "block";
+      document.getElementById("main-screen").scrollIntoView({ behavior: "smooth" });
+    } else {
+      document.getElementById("auth-screen").style.display = "flex";
+      document.getElementById("main-screen").style.display = "none";
+    }
+  });
+}
