@@ -1,9 +1,9 @@
 // =============================
-// Firebase Setup
+// Firebase (shared config)
 // =============================
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { 
-  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged 
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -20,46 +20,45 @@ const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// =============================
-// Login Handlers
-// =============================
-function handleSignIn(mode) {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      const user   = result.user;
-      const domain = user.email.split("@")[1];
-
-      if (domain !== "icsz.ch") {
-        alert("You must use your school email.");
-        signOut(auth);
-        return;
-      }
-
-      console.log(`Signed in as ${user.displayName || user.email}`);
-      window.location.href = "index.html"; // ✅ go to main app
-    })
-    .catch((error) => {
-      console.error(`${mode} error:`, error.message);
-    });
+// Wait for Firebase to finish restoring session (no racing)
+function authReady() {
+  return new Promise((resolve) => {
+    const unsub = onAuthStateChanged(auth, (u) => { unsub(); resolve(u); });
+  });
 }
 
 // =============================
-// DOM Ready
+// Page boot
 // =============================
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("signUpBtn").addEventListener("click", () => handleSignIn("signup"));
-  document.getElementById("logInBtn").addEventListener("click", () => handleSignIn("login"));
-});
+document.addEventListener("DOMContentLoaded", async () => {
+  // 1) Only decide after Firebase is ready
+  const user = await authReady();
 
-// =============================
-// Auth state persistence
-// =============================
-onAuthStateChanged(auth, (user) => {
   if (user) {
-    // already logged in → jump straight to main app
-    window.location.href = "index.html";
-  } else {
-    // stay on login screen
-    console.log("Not signed in, waiting for user action.");
+    // Already signed in → go straight to app (no back-loop)
+    location.replace("index.html");
+    return;
   }
+
+  // 2) Not signed in → wire up buttons
+  const signUpBtn = document.getElementById("signUpBtn");
+  const logInBtn  = document.getElementById("logInBtn");
+
+  function handleSignIn(mode) {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const u = result.user;
+        const domain = (u.email || "").split("@")[1];
+        if (domain !== "icsz.ch") {
+          alert("You must use your school email.");
+          return signOut(auth);
+        }
+        // Success → jump to app
+        location.replace("index.html");
+      })
+      .catch((err) => console.error(`${mode} error:`, err));
+  }
+
+  signUpBtn?.addEventListener("click", () => handleSignIn("signup"));
+  logInBtn?.addEventListener("click", () => handleSignIn("login"));
 });
