@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Buttons
  document.getElementById("accountBtn").addEventListener("click", () => {
-  window.location.href = "https://username.github.io/Student-Lens/account.html";
+  window.location.href = "https://studentlensics-tech.github.io/Student-Lens/account.html";
 });
 
   document.getElementById("logoutBtn")?.addEventListener("click", () => {
@@ -202,6 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
