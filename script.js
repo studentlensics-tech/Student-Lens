@@ -1,5 +1,5 @@
 // =============================
-// Firebase Setup
+// Firebase (shared config)
 // =============================
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
@@ -17,33 +17,54 @@ const firebaseConfig = {
 const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+// Wait for Firebase to finish restoring session (prevents loops)
+function authReady() {
+  return new Promise((resolve) => {
+    const unsub = onAuthStateChanged(auth, (u) => { unsub(); resolve(u); });
+  });
+}
+
 // =============================
 // UI helpers
 // =============================
 function showMainScreen(user) {
-  document.getElementById("main-screen").style.display = "block";
-  document.getElementById("profile-name").textContent = user.displayName || user.email;
-  document.getElementById("profile-pic").src = user.photoURL || "img/IcsBuilding.jpg";
+  const main = document.getElementById("main-screen");
+  if (main) main.style.display = "block";
+
+  const nameEl = document.getElementById("profile-name");
+  const picEl  = document.getElementById("profile-pic");
+  if (nameEl) nameEl.textContent = user.displayName || user.email || "Account";
+  if (picEl)  picEl.src = user.photoURL || "img/IcsBuilding.jpg";
 }
 
 function redirectToLogin() {
-  window.location.href = "login.html";
+  // replace() avoids back-button war
+  location.replace("login.html");
 }
 
 // =============================
-// DOM Ready
+// Page boot
 // =============================
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  // Decide only after Firebase is ready
+  const user = await authReady();
+  if (!user) {
+    redirectToLogin();
+    return;
+  }
+
+  // We are signed in → render UI + handlers
+  showMainScreen(user);
+
+  // Profile dropdown
   const profileBtn   = document.getElementById("Profile-btn");
   const dropdownMenu = document.getElementById("profileDropdown");
-
   if (profileBtn && dropdownMenu) {
     profileBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       const isOpen = dropdownMenu.classList.toggle("active");
       profileBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
     });
-
     document.addEventListener("click", () => {
       dropdownMenu.classList.remove("active");
       profileBtn.setAttribute("aria-expanded", "false");
@@ -51,63 +72,39 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Account page
-  const accountBtn = document.getElementById("accountBtn");
-  if (accountBtn) {
-    accountBtn.addEventListener("click", () => {
-      window.location.href = "account.html";
-    });
-  }
+  document.getElementById("accountBtn")?.addEventListener("click", () => {
+    location.href = "account.html";
+  });
 
   // Logout
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      signOut(auth).catch((err) => console.error("Sign out error:", err.message));
-    });
+  document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    signOut(auth).catch((err) => console.error("Sign out error:", err));
+  });
+
+  // Home button (no nav away; just scroll)
+  document.getElementById("homeLink")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.getElementById("main-screen")?.scrollIntoView({ behavior: "smooth" });
+  });
+
+  // Header date (supports either id you've used)
+  const dateEl = document.getElementById("currentDate") || document.getElementById("top-date");
+  if (dateEl) {
+    const update = () => {
+      const d = new Date();
+      dateEl.textContent = d.toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+    };
+    update();
+    const now = new Date();
+    const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    setTimeout(() => {
+      update();
+      setInterval(update, 24 * 60 * 60 * 1000);
+    }, nextMidnight - now);
   }
 
-  // Home button
-  const homeLink = document.getElementById("homeLink");
-  if (homeLink) {
-    homeLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      document.getElementById("main-screen").scrollIntoView({ behavior: "smooth" });
-    });
-  }
-});
-
-// =============================
-// Auth state persistence
-// =============================
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    showMainScreen(user);
-  } else {
-    redirectToLogin();
-  }
-});
-
-// =============================
-// Header date
-// =============================
-function ordinal(n) {
-  const s = ["th", "st", "nd", "rd"], v = n % 100;
-  return n + (s[(v - 20) % 10] || s[v] || s[0]);
-}
-function formatTopDate(d) {
-  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  return `${ordinal(d.getDate())} ${months[d.getMonth()]}, ${d.getFullYear()}`;
-}
-function updateTopDate() {
-  const el = document.getElementById("top-date");
-  if (el) el.textContent = formatTopDate(new Date());
-}
-document.addEventListener("DOMContentLoaded", () => {
-  updateTopDate();
-  const now = new Date();
-  const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-  setTimeout(() => {
-    updateTopDate();
-    setInterval(updateTopDate, 24 * 60 * 60 * 1000);
-  }, nextMidnight - now);
+  // Also react to future auth changes (e.g., logout)
+  onAuthStateChanged(auth, (u) => {
+    if (!u) redirectToLogin();
+  });
 });
