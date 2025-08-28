@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — Student Lens</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="auth-screen" style="position: relative; height: 100vh; width: 100%; display: flex;">
+    <img src="img/Dark.jpg" alt="Background"
+         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1;">
+
+    <div class="auth-left">
+      <h1>WELCOME TO THE<br>STUDENT LENS<br>WEBSITE</h1>
+    </div>
+    <div class="auth-right">
+      <div class="card">
+        <p>If you are new to the website, please click here:</p>
+        <button id="signUpBtn" class="google-btn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"/>
+          Sign up with Google
+        </button>
+      </div>
+      <div class="card">
+        <p>If you are returning to the website, please click here:</p>
+        <button id="logInBtn" class="google-btn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"/>
+          Log in with Google
+        </button>
+      </div>
+      <div id="auth-message"></div>
+    </div>
+  </div>
+
+  <!-- LOGIN SCRIPT -->
+  <script type="module">
+    // Simulate Firebase / auth
+    const isLoggedIn = localStorage.getItem("user");
+
+    // if already logged in → redirect to index
+    if (isLoggedIn) {
+      window.location.href = "index.html";
+    }
+
+    const logInBtn = document.getElementById("logInBtn");
+    const signUpBtn = document.getElementById("signUpBtn");
+
+    logInBtn.addEventListener("click", () => {
+      // TODO: replace with Firebase Google login
+      localStorage.setItem("user", JSON.stringify({ name: "Student" }));
+      window.location.href = "index.html";
+    });
+
+    signUpBtn.addEventListener("click", () => {
+      // TODO: replace with Firebase Google signup
+      localStorage.setItem("user", JSON.stringify({ name: "New Student" }));
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
