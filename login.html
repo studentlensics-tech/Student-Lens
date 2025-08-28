@@ -35,27 +35,57 @@
 
   <!-- LOGIN SCRIPT -->
   <script type="module">
-    // Simulate Firebase / auth
-    const isLoggedIn = localStorage.getItem("user");
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } 
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-    // if already logged in → redirect to index
-    if (isLoggedIn) {
-      window.location.href = "index.html";
-    }
+    // =============================
+    // Firebase Setup
+    // =============================
+    const firebaseConfig = {
+      apiKey: "AIzaSyAsGS-W7EZ_ZX7Cgv_ZxwOLZkp-u8ilaRQ",
+      authDomain: "studentlensics-4369f.firebaseapp.com",
+      projectId: "studentlensics-4369f",
+      storageBucket: "studentlensics-4369f.firebasestorage.app",
+      messagingSenderId: "792919091240",
+      appId: "1:792919091240:web:31ae2869ddd8b0d28cad1d",
+      measurementId: "G-V3YBM8DZXW"
+    };
 
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // =============================
+    // Auth state check
+    // =============================
+    onAuthStateChanged(auth, (user) => {
+      console.log("[Login Page] Auth state:", user);
+      if (user) {
+        // ✅ Already logged in → go to index
+        window.location.href = "index.html";
+      }
+    });
+
+    // =============================
+    // Button handlers
+    // =============================
     const logInBtn = document.getElementById("logInBtn");
     const signUpBtn = document.getElementById("signUpBtn");
+    const authMessage = document.getElementById("auth-message");
 
     logInBtn.addEventListener("click", () => {
-      // TODO: replace with Firebase Google login
-      localStorage.setItem("user", JSON.stringify({ name: "Student" }));
-      window.location.href = "index.html";
+      signInWithPopup(auth, provider).catch((err) => {
+        console.error(err);
+        authMessage.textContent = "Login failed: " + err.message;
+      });
     });
 
     signUpBtn.addEventListener("click", () => {
-      // TODO: replace with Firebase Google signup
-      localStorage.setItem("user", JSON.stringify({ name: "New Student" }));
-      window.location.href = "index.html";
+      signInWithPopup(auth, provider).catch((err) => {
+        console.error(err);
+        authMessage.textContent = "Sign-up failed: " + err.message;
+      });
     });
   </script>
 </body>
