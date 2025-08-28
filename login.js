@@ -1,6 +1,3 @@
-// =============================
-// Firebase Setup
-// =============================
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -18,20 +15,19 @@ const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// =============================
-// Handle login
-// =============================
 function handleSignIn(mode) {
   signInWithPopup(auth, provider)
     .then((result) => {
       const user = result.user;
       const domain = user.email.split("@")[1];
+
       if (domain !== "icsz.ch") {
         alert("You must use your school email.");
         signOut(auth);
         return;
       }
-      // Redirect to main app after success
+
+      // Redirect after successful sign-in
       window.location.href = "index.html";
     })
     .catch((error) => {
@@ -39,27 +35,18 @@ function handleSignIn(mode) {
     });
 }
 
-// =============================
-// DOM Ready
-// =============================
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("signUpBtn").addEventListener("click", () => handleSignIn("signup"));
   document.getElementById("logInBtn").addEventListener("click", () => handleSignIn("login"));
 });
 
-// =============================
-// Redirect if already logged in
-// =============================
+// If already logged in, seamless redirect to index
 onAuthStateChanged(auth, (user) => {
   if (user) {
     const domain = user.email.split("@")[1];
     if (domain === "icsz.ch") {
-      // Small delay to let logout events settle
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 300);
+      window.location.href = "index.html";
     } else {
-      // If logged in with wrong domain → force logout
       signOut(auth);
     }
   }
