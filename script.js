@@ -136,8 +136,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Buttons
- document.getElementById("accountBtn").addEventListener("click", () => {
-  window.location.href = "https://studentlensics-tech.github.io/Student-Lens/account.html";
+   document.getElementById("accountBtn").addEventListener("click", () => {
+  if (!window.location.pathname.endsWith("account.html")) {
+    window.location.href = "https://studentlensics-tech.github.io/Student-Lens/account.html";
+  } else {
+    // already here → just close the dropdown
+    document.getElementById("profileDropdown").classList.remove("active");
+    document.getElementById("Profile-btn").setAttribute("aria-expanded", "false");
+  }
+});
+
 });
 
   document.getElementById("logoutBtn")?.addEventListener("click", () => {
@@ -202,6 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
