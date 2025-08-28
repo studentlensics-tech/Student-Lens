@@ -52,6 +52,15 @@ document.addEventListener("DOMContentLoaded", () => {
 // =============================
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    window.location.href = "index.html"; // already signed in → skip login
+    const domain = user.email.split("@")[1];
+    if (domain === "icsz.ch") {
+      // Small delay to let logout events settle
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 300);
+    } else {
+      // If logged in with wrong domain → force logout
+      signOut(auth);
+    }
   }
 });
