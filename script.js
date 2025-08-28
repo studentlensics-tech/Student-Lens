@@ -136,9 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Buttons
-  document.getElementById("accountBtn")?.addEventListener("click", () => {
-    // TODO: route to your account page
-    alert("Go to account page…");
+  document.getElementById("accountBtn").addEventListener("click", () => {
+  window.location.href = "account.html"; // change to your real page
     dropdownMenu.classList.remove("active");
     profileBtn.setAttribute("aria-expanded", "false");
   });
@@ -205,6 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
