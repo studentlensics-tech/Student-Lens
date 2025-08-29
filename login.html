@@ -14,6 +14,7 @@
     <div class="auth-left">
       <h1>WELCOME TO THE<br>STUDENT LENS<br>WEBSITE</h1>
     </div>
+
     <div class="auth-right">
       <div class="card">
         <p>If you are new to the website, please click here:</p>
@@ -22,6 +23,7 @@
           Sign up with Google
         </button>
       </div>
+
       <div class="card">
         <p>If you are returning to the website, please click here:</p>
         <button id="logInBtn" class="google-btn">
@@ -33,55 +35,6 @@
     </div>
   </div>
 
-  <!-- LOGIN SCRIPT -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } 
-      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAsGS-W7EZ_ZX7Cgv_ZxwOLZkp-u8ilaRQ",
-      authDomain: "studentlensics-4369f.firebaseapp.com",
-      projectId: "studentlensics-4369f",
-      storageBucket: "studentlensics-4369f.firebasestorage.app",
-      messagingSenderId: "792919091240",
-      appId: "1:792919091240:web:31ae2869ddd8b0d28cad1d",
-      measurementId: "G-V3YBM8DZXW"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    // Redirect only AFTER auth check
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("✅ User already logged in → redirecting to index");
-        window.location.replace("index.html");
-      } else {
-        console.log("ℹ️ No user, staying on login page");
-      }
-    });
-
-    document.getElementById("logInBtn").addEventListener("click", async () => {
-      try {
-        await signInWithPopup(auth, provider);
-        window.location.replace("index.html");
-      } catch (err) {
-        console.error("Login failed:", err.message);
-        document.getElementById("auth-message").textContent = "Login failed. Try again.";
-      }
-    });
-
-    document.getElementById("signUpBtn").addEventListener("click", async () => {
-      try {
-        await signInWithPopup(auth, provider);
-        window.location.replace("index.html");
-      } catch (err) {
-        console.error("Signup failed:", err.message);
-        document.getElementById("auth-message").textContent = "Signup failed. Try again.";
-      }
-    });
-  </script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
