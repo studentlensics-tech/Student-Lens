@@ -54,6 +54,16 @@
       position:absolute; width:1px; height:1px; padding:0; margin:-1px;
       overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
     }
+
+    /* footer positioning fix */
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .page-container { flex: 1; }
+    .site-footer { margin-top: auto; }
   </style>
 </head>
 <body>
@@ -70,7 +80,8 @@
         </svg>
         <input type="search" id="site-search" placeholder="Search..." />
       </div>
-      <span class="top-date" id="currentDate"></span>
+      <!-- match index.html: JS expects this exact ID -->
+      <span class="top-date" id="top-date"></span>
     </div>
 
     <!-- CENTER: title -->
@@ -88,14 +99,15 @@
         </a>
 
         <div class="profile-wrapper">
-          <button type="button" class="profile" id="Profile-btn"
-                  aria-expanded="false" aria-controls="profileDropdown">
-            <img id="profile-pic" src="img/IcsBuilding.jpg"
+          <!-- match index.html IDs exactly -->
+          <button type="button" class="profile" id="dropdown-toggle"
+                  aria-expanded="false" aria-controls="dropdown-menu">
+            <img id="nav-profile-pic" src="img/IcsBuilding.jpg"
                  alt="Profile Picture" class="prof-pic">
-            <span id="profile-name" class="profile-name">Loading...</span>
+            <span id="nav-profile-name" class="profile-name">Loading...</span>
             <span class="chevron">▼</span>
           </button>
-          <div class="dropdown-menu" id="profileDropdown"
+          <div class="dropdown-menu" id="dropdown-menu"
                role="menu" aria-hidden="true">
             <button type="button" id="accountBtn" class="dropdown-item">ACCOUNT SETTINGS</button>
             <hr class="dropdown-sep">
