@@ -156,7 +156,6 @@ function wireAccountPage(user) {
   console.log("Account page ready for", user.email);
 }
 
-
 // [G] Role Handling (future placeholder)
 // ----------------------------------------------
 // Here you can check custom claims from Firebase or Firestore roles.
