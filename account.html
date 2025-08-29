@@ -123,13 +123,13 @@
   </footer>
 
   <!-- Optional JS for date -->
+   <!-- inline tiny helper to populate the date -->
   <script>
-    const dateEl = document.getElementById("currentDate");
-    if (dateEl) {
-      const now = new Date();
-      dateEl.textContent = now.toLocaleDateString(undefined, { 
-        weekday: "long", year: "numeric", month: "long", day: "numeric" 
-      });
+    document.addEventListener('DOMContentLoaded', () => {
+      const el = document.getElementById('currentDate');
+      if (el) {
+        const d = new Date();
+        el.textContent = d.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
     }
   </script>
 </body>
