@@ -122,15 +122,15 @@
     <div class="footer-inner">THE STUDENT LENS</div>
   </footer>
 
-  <!-- Optional JS for date -->
-   <!-- inline tiny helper to populate the date -->
+  <!-- inline tiny helper to populate the date -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const el = document.getElementById('currentDate');
       if (el) {
         const d = new Date();
         el.textContent = d.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
-    }
+      }
+    });
   </script>
 </body>
 </html>
