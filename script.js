@@ -1,8 +1,10 @@
 // =============================
-// Firebase Setup
+// FIREBASE SHARED CONFIG
 // =============================
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAsGS-W7EZ_ZX7Cgv_ZxwOLZkp-u8ilaRQ",
@@ -14,31 +16,83 @@ const firebaseConfig = {
   measurementId: "G-V3YBM8DZXW"
 };
 
-const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-// =============================
-// UI helpers
-// =============================
-function showMainScreen(user) {
-  const mainScreen = document.getElementById("main-screen");
-  if (mainScreen) {
-    mainScreen.style.display = "block";
-  }
-  const profileName = document.getElementById("profile-name");
-  if (profileName) {
-    profileName.textContent = user.displayName || user.email;
-  }
-  const profilePic = document.getElementById("profile-pic");
-  if (profilePic) {
-    profilePic.src = user.photoURL || "img/IcsBuilding.jpg";
-  }
+function currentPage() {
+  return window.location.pathname.split("/").pop(); // e.g. "login.html"
 }
 
 // =============================
-// DOM Ready
+// GLOBAL OAUTH HELPERS
+// =============================
+function handleSignIn(mode) {
+  return signInWithPopup(auth, provider)
+    .then((result) => {
+      const u = result.user;
+      const domain = (u.email || "").split("@")[1];
+      if (domain !== "icsz.ch") {
+        alert("You must use your school email.");
+        return signOut(auth);
+      }
+      location.replace("index.html");
+    })
+    .catch((err) => console.error(`${mode} error:`, err));
+}
+
+function handleSignOut() {
+  return signOut(auth).catch((err) => console.error("Sign out error:", err));
+}
+
+// =============================
+// AUTH ROUTER
+// =============================
+onAuthStateChanged(auth, (user) => {
+  const page = currentPage();
+
+  if (!user) {
+    if (page !== "login.html") {
+      console.log("⛔ Not logged in → redirecting to login");
+      location.replace("login.html");
+    }
+  } else {
+    if (page === "login.html") {
+      console.log("✅ Already logged in → redirecting to app");
+      location.replace("index.html");
+    } else {
+      console.log("✅ Logged in as:", user.email);
+      setupPage(page, user);
+    }
+  }
+});
+
+// =============================
+// PAGE BOOTSTRAP
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
+  const page = currentPage();
+
+  if (page === "login.html") initLoginPage();
+  if (page === "index.html") initIndexPageUI();
+  if (page === "account.html") initAccountPageUI();
+});
+
+// =============================
+// LOGIN PAGE SECTION
+// =============================
+function initLoginPage() {
+  console.log("📄 Login page ready");
+  document.getElementById("signUpBtn")?.addEventListener("click", () => handleSignIn("signup"));
+  document.getElementById("logInBtn")?.addEventListener("click", () => handleSignIn("login"));
+}
+
+// =============================
+// INDEX PAGE SECTION
+// =============================
+function initIndexPageUI() {
+  console.log("📄 Index page UI setup");
+
   const profileBtn   = document.getElementById("Profile-btn");
   const dropdownMenu = document.getElementById("profileDropdown");
 
@@ -48,51 +102,57 @@ document.addEventListener("DOMContentLoaded", () => {
       const isOpen = dropdownMenu.classList.toggle("active");
       profileBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
     });
-
     document.addEventListener("click", () => {
       dropdownMenu.classList.remove("active");
       profileBtn.setAttribute("aria-expanded", "false");
     });
   }
 
-  const accountBtn = document.getElementById("accountBtn");
-  if (accountBtn) {
-    accountBtn.addEventListener("click", () => {
-      window.location.href = "account.html";
-    });
+  document.getElementById("accountBtn")?.addEventListener("click", () => {
+    location.href = "account.html";
+  });
+
+  document.getElementById("logoutBtn")?.addEventListener("click", handleSignOut);
+
+  document.getElementById("homeLink")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.getElementById("main-screen")?.scrollIntoView({ behavior: "smooth" });
+  });
+
+  // date header
+  updateTopDate();
+  const now = new Date();
+  const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  setTimeout(() => {
+    updateTopDate();
+    setInterval(updateTopDate, 24 * 60 * 60 * 1000);
+  }, nextMidnight - now);
+}
+
+function setupPage(page, user) {
+  if (page === "index.html") {
+    // show main screen
+    document.getElementById("main-screen").style.display = "block";
+    document.getElementById("profile-name").textContent = user.displayName || user.email;
+    const pic = document.getElementById("profile-pic");
+    if (pic) pic.src = user.photoURL || "img/IcsBuilding.jpg";
   }
 
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      signOut(auth).catch((err) => console.error("Sign out error:", err.message));
-    });
+  if (page === "account.html") {
+    document.getElementById("account-email").textContent = user.email;
   }
-
-  const homeLink = document.getElementById("homeLink");
-  if (homeLink) {
-    homeLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      document.getElementById("main-screen")?.scrollIntoView({ behavior: "smooth" });
-    });
-  }
-});
+}
 
 // =============================
-// Auth state persistence
+// ACCOUNT PAGE SECTION
 // =============================
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("✅ User logged in → showing main screen");
-    showMainScreen(user);
-  } else {
-    console.log("⛔ No user → redirecting to login");
-    location.replace("login.html");
-  }
-});
+function initAccountPageUI() {
+  console.log("📄 Account page UI setup");
+  document.getElementById("logoutBtn")?.addEventListener("click", handleSignOut);
+}
 
 // =============================
-// Header date
+// DATE HELPERS
 // =============================
 function ordinal(n) {
   const s = ["th", "st", "nd", "rd"], v = n % 100;
@@ -106,12 +166,3 @@ function updateTopDate() {
   const el = document.getElementById("top-date");
   if (el) el.textContent = formatTopDate(new Date());
 }
-document.addEventListener("DOMContentLoaded", () => {
-  updateTopDate();
-  const now = new Date();
-  const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-  setTimeout(() => {
-    updateTopDate();
-    setInterval(updateTopDate, 24 * 60 * 60 * 1000);
-  }, nextMidnight - now);
-});
