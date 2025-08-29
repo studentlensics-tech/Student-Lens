@@ -1,9 +1,30 @@
-// =============================
-// FIREBASE SHARED CONFIG
-// =============================
+// ==============================================
+// app.js — Student Lens
+// ==============================================
+//
+// LEGEND / SECTIONS
+// -----------------
+// [A] Firebase Setup (shared everywhere)
+// [B] Shared Helpers (date, header UI, profile UI)
+// [C] Page Detection
+// [D] Login Page Logic
+// [E] Index Page Logic
+// [F] Account Page Logic
+// [G] Role Handling (future-ready placeholder)
+// [H] Boot / Page Routing
+//
+// ==============================================
+
+
+// [A] Firebase Setup
+// ----------------------------------------------
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {
-  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -16,153 +37,151 @@ const firebaseConfig = {
   measurementId: "G-V3YBM8DZXW"
 };
 
-const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-function currentPage() {
-  return window.location.pathname.split("/").pop(); // e.g. "login.html"
+function authReady() {
+  return new Promise((resolve) => {
+    const unsub = onAuthStateChanged(auth, (u) => { unsub(); resolve(u); });
+  });
 }
 
-// =============================
-// GLOBAL OAUTH HELPERS
-// =============================
-function handleSignIn(mode) {
-  return signInWithPopup(auth, provider)
-    .then((result) => {
-      const u = result.user;
-      const domain = (u.email || "").split("@")[1];
-      if (domain !== "icsz.ch") {
-        alert("You must use your school email.");
-        return signOut(auth);
-      }
-      location.replace("index.html");
-    })
-    .catch((err) => console.error(`${mode} error:`, err));
+
+// [B] Shared Helpers
+// ----------------------------------------------
+function setDate() {
+  const el = document.getElementById("currentDate") || document.getElementById("top-date");
+  if (!el) return;
+  const d = new Date();
+  el.textContent = d.toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
 }
 
-function handleSignOut() {
-  return signOut(auth).catch((err) => console.error("Sign out error:", err));
+function showProfileUI(user) {
+  const nameEl = document.getElementById("profile-name");
+  const picEl  = document.getElementById("profile-pic");
+  if (nameEl) nameEl.textContent = user.displayName || user.email;
+  if (picEl)  picEl.src = user.photoURL || "img/IcsBuilding.jpg";
 }
 
-// =============================
-// AUTH ROUTER
-// =============================
-onAuthStateChanged(auth, (user) => {
-  const page = currentPage();
-
-  if (!user) {
-    if (page !== "login.html") {
-      console.log("⛔ Not logged in → redirecting to login");
-      location.replace("login.html");
-    }
-  } else {
-    if (page === "login.html") {
-      console.log("✅ Already logged in → redirecting to app");
-      location.replace("index.html");
-    } else {
-      console.log("✅ Logged in as:", user.email);
-      setupPage(page, user);
-    }
-  }
-});
-
-// =============================
-// PAGE BOOTSTRAP
-// =============================
-document.addEventListener("DOMContentLoaded", () => {
-  const page = currentPage();
-
-  if (page === "login.html") initLoginPage();
-  if (page === "index.html") initIndexPageUI();
-  if (page === "account.html") initAccountPageUI();
-});
-
-// =============================
-// LOGIN PAGE SECTION
-// =============================
-function initLoginPage() {
-  console.log("📄 Login page ready");
-  document.getElementById("signUpBtn")?.addEventListener("click", () => handleSignIn("signup"));
-  document.getElementById("logInBtn")?.addEventListener("click", () => handleSignIn("login"));
-}
-
-// =============================
-// INDEX PAGE SECTION
-// =============================
-function initIndexPageUI() {
-  console.log("📄 Index page UI setup");
-
+function wireHeader(user) {
+  // dropdown
   const profileBtn   = document.getElementById("Profile-btn");
   const dropdownMenu = document.getElementById("profileDropdown");
 
   if (profileBtn && dropdownMenu) {
     profileBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isOpen = dropdownMenu.classList.toggle("active");
-      profileBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      dropdownMenu.classList.toggle("active");
     });
-    document.addEventListener("click", () => {
-      dropdownMenu.classList.remove("active");
-      profileBtn.setAttribute("aria-expanded", "false");
-    });
+    document.addEventListener("click", () => dropdownMenu.classList.remove("active"));
   }
 
-  document.getElementById("accountBtn")?.addEventListener("click", () => {
-    location.href = "account.html";
+  // account
+  const accountBtn = document.getElementById("accountBtn");
+  if (accountBtn) accountBtn.addEventListener("click", () => location.href = "account.html");
+
+  // logout
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    location.replace("login.html");
   });
-
-  document.getElementById("logoutBtn")?.addEventListener("click", handleSignOut);
-
-  document.getElementById("homeLink")?.addEventListener("click", (e) => {
-    e.preventDefault();
-    document.getElementById("main-screen")?.scrollIntoView({ behavior: "smooth" });
-  });
-
-  // date header
-  updateTopDate();
-  const now = new Date();
-  const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-  setTimeout(() => {
-    updateTopDate();
-    setInterval(updateTopDate, 24 * 60 * 60 * 1000);
-  }, nextMidnight - now);
 }
 
-function setupPage(page, user) {
-  if (page === "index.html") {
-    // show main screen
-    document.getElementById("main-screen").style.display = "block";
-    document.getElementById("profile-name").textContent = user.displayName || user.email;
-    const pic = document.getElementById("profile-pic");
-    if (pic) pic.src = user.photoURL || "img/IcsBuilding.jpg";
+
+// [C] Page Detection
+// ----------------------------------------------
+function isLoginPage()   { return !!document.getElementById("logInBtn"); }
+function isIndexPage()   { return !!document.getElementById("main-screen"); }
+function isAccountPage() { return !!document.getElementById("account-page"); }
+
+
+// [D] Login Page Logic
+// ----------------------------------------------
+function wireLoginPage() {
+  const signUpBtn = document.getElementById("signUpBtn");
+  const logInBtn  = document.getElementById("logInBtn");
+  const msgEl     = document.getElementById("auth-message");
+
+  async function doSignIn(mode) {
+    try {
+      const res = await signInWithPopup(auth, provider);
+      const u = res.user;
+      const domain = (u.email || "").split("@")[1];
+      if (domain !== "icsz.ch") {
+        alert("Use your school email (@icsz.ch).");
+        await signOut(auth);
+        return;
+      }
+      if (msgEl) msgEl.textContent = mode === "signup" ? `Welcome, ${u.displayName}!` : `Welcome back, ${u.displayName}!`;
+      location.replace("index.html");
+    } catch (err) {
+      console.error(err);
+      if (msgEl) msgEl.textContent = "Sign-in failed.";
+    }
   }
 
-  if (page === "account.html") {
-    document.getElementById("account-email").textContent = user.email;
+  signUpBtn?.addEventListener("click", () => doSignIn("signup"));
+  logInBtn?.addEventListener("click", () => doSignIn("login"));
+}
+
+
+// [E] Index Page Logic
+// ----------------------------------------------
+function wireIndexPage(user) {
+  const main = document.getElementById("main-screen");
+  if (main) main.style.display = "block";
+
+  showProfileUI(user);
+  wireHeader(user);
+  setDate();
+
+  // Example: search bar / announcements wiring can go here later
+  console.log("Index page ready for", user.email);
+}
+
+
+// [F] Account Page Logic
+// ----------------------------------------------
+function wireAccountPage(user) {
+  const acc = document.getElementById("account-page");
+  if (acc) acc.style.display = "block";
+
+  showProfileUI(user);
+  wireHeader(user);
+  setDate();
+
+  // Example: role-based options will be plugged in here
+  console.log("Account page ready for", user.email);
+}
+
+
+// [G] Role Handling (future placeholder)
+// ----------------------------------------------
+// Here you can check custom claims from Firebase or Firestore roles.
+// Example:
+//   if (userRole === "admin") { showAdminUI(); }
+//   else if (userRole === "student") { showStudentUI(); }
+
+
+// [H] Boot / Page Routing
+// ----------------------------------------------
+document.addEventListener("DOMContentLoaded", async () => {
+  const user = await authReady();
+
+  if (isLoginPage()) {
+    if (user) return location.replace("index.html");
+    return wireLoginPage();
   }
-}
 
-// =============================
-// ACCOUNT PAGE SECTION
-// =============================
-function initAccountPageUI() {
-  console.log("📄 Account page UI setup");
-  document.getElementById("logoutBtn")?.addEventListener("click", handleSignOut);
-}
+  if (isIndexPage()) {
+    if (!user) return location.replace("login.html");
+    return wireIndexPage(user);
+  }
 
-// =============================
-// DATE HELPERS
-// =============================
-function ordinal(n) {
-  const s = ["th", "st", "nd", "rd"], v = n % 100;
-  return n + (s[(v - 20) % 10] || s[v] || s[0]);
-}
-function formatTopDate(d) {
-  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  return `${ordinal(d.getDate())} ${months[d.getMonth()]}, ${d.getFullYear()}`;
-}
-function updateTopDate() {
-  const el = document.getElementById("top-date");
-  if (el) el.textContent = formatTopDate(new Date());
-}
+  if (isAccountPage()) {
+    if (!user) return location.replace("login.html");
+    return wireAccountPage(user);
+  }
+});
