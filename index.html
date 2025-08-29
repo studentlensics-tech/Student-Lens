@@ -15,7 +15,8 @@
     /* --- header layout fixes --- */
     .site-header{ display:flex; align-items:center; gap:16px; }
     .header-left{ display:flex; flex-direction:column; align-items:flex-start; gap:6px; }
-    .header-right{ margin-left:auto; }   /* pushes Home/profile fully to the right */
+    .header-right{ margin-left:auto; }
+    .site-title { font-size: 20px; font-weight: bold; }
 
     /* make the thin dividers show full width (they sit OUTSIDE the flex header) */
     .thin-divider{
@@ -58,7 +59,7 @@
 <body>
 
   <!-- MAIN STUDENT LENS PAGE -->
-  <div id="main-screen" style="display:none;">
+  <div id="main-screen">
 
     <!-- HEADER -->
     <header class="site-header">
@@ -117,57 +118,6 @@
     <div class="thin-divider"></div>
     <div class="thin-divider"></div>
 
-  <!-- MAIN STUDENT LENS PAGE -->
-  <div id="main-screen" style="display:none;">
-
-    <!-- HEADER -->
-    <header class="site-header">
-      <div class="header-left">
-        <div class="searchgroup">
-          <label for="site-search" class="visually-hidden">Search</label>
-          <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
-            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"/>
-          </svg>
-          <input type="search" id="site-search" placeholder="Search..." />
-        </div>
-        <span class="top-date" id="currentDate"></span>
-      </div>
-
-      <div class="site-title">STUDENT LENS</div>
-
-      <div class="header-right">
-        <div class="right-stack">
-          <a class="home-link" href="#" id="homeLink" title="Home">
-            <svg class="icon-home" viewBox="0 0 24 24" aria-hidden="true" style="width:22px;height:22px;margin-right:6px;">
-              <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5z"
-                    fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-            </svg>
-            <span>Home</span>
-          </a>
-
-          <div class="profile-wrapper">
-            <button type="button" class="profile" id="Profile-btn"
-                    aria-expanded="false" aria-controls="profileDropdown">
-              <img id="profile-pic" src="img/IcsBuilding.jpg"
-                   alt="Profile Picture" class="prof-pic">
-              <span id="profile-name" class="profile-name">Loading...</span>
-              <span class="chevron">▼</span>
-            </button>
-            <div class="dropdown-menu" id="profileDropdown"
-                 role="menu" aria-hidden="true">
-              <button type="button" id="accountBtn" class="dropdown-item">ACCOUNT SETTINGS</button>
-              <hr class="dropdown-sep">
-              <button type="button" id="logoutBtn" class="dropdown-item danger">LOG OUT</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <div class="thin-divider"></div>
-    <div class="thin-divider"></div>
-
     <!-- MAIN LAYOUT -->
     <main class="layout">
       <!-- left column -->
@@ -176,7 +126,6 @@
         <div class="game-list">
           <div class="game-card game-yellow"><div class="game-ic">🐝</div><div class="game-title">Spelling Bee</div></div>
           <div class="game-card game-light"><div class="game-ic">🟩</div><div class="game-title">Wordle</div></div>
-          <div class="game-card game-teal"><div class="game-ic">🔗</div><div class="game-title">Strands</div></div>
           <div class="game-card game-teal"><div class="game-ic">🔗</div><div class="game-title">Strands</div></div>
         </div>
       </aside>
@@ -261,7 +210,6 @@
     </footer>
   </div>
 
-
   <!-- Scripts -->
   <script type="module" src="app.js"></script>
 
@@ -277,4 +225,3 @@
   </script>
 </body>
 </html>
-
