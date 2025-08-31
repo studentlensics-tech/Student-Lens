@@ -276,6 +276,11 @@ body {
   padding: 0 18px 60px;
 }
 
+.single{
+   max-width:1200px;
+   margin: 50px auto
+}
+
 .col-heading{ font-weight:700; letter-spacing:.6px; font-size:18px; margin:6px 8px 18px; color:#222; }
 
 .col-left .game-list{ display:flex; flex-direction:column; gap:16px; }
@@ -432,5 +437,6 @@ html, body {
   padding: 14px 22px;
   margin-top: auto;
 }
+
 
 
