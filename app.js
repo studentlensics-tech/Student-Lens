@@ -141,13 +141,12 @@ function wireIndexPage(user) {
   console.log("Index page ready for", user.email);
 }
 
-// Default user role
-let userRole = "Student"; // Change this dynamically in production
-
-// Function to render the right column based on role
 function renderDashboard() {
   const lensList = document.getElementById("student-lens-list");
   const articlesBox = document.getElementById("articles-box");
+
+  // Only run if right-column elements exist
+  if (!lensList || !articlesBox) return;
 
   // Student Lens Section
   if (userRole === "Student") {
@@ -268,4 +267,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     return wireAccountPage(user);
   }
 });
+
 
