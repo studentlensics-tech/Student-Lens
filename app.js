@@ -141,6 +141,90 @@ function wireIndexPage(user) {
   console.log("Index page ready for", user.email);
 }
 
+// Default user role
+let userRole = "Student"; // Change this dynamically in production
+
+// Function to render the right column based on role
+function renderDashboard() {
+  const lensList = document.getElementById("student-lens-list");
+  const articlesBox = document.getElementById("articles-box");
+
+  // Student Lens Section
+  if (userRole === "Student") {
+    lensList.innerHTML = `
+      <li><button class="action">ABOUT US</button></li>
+      <li><button class="action">BECOME A WRITER</button></li>
+    `;
+  } else {
+    lensList.innerHTML = `<li><button class="action">ABOUT US</button></li>`;
+  }
+
+  // Articles Section
+  switch(userRole) {
+    case "Writer":
+      articlesBox.innerHTML = `
+        <div class="info-title">ARTICLES</div><br>
+        <div class="streak-card small">
+          <div class="streak-num">3</div>
+          <div class="streak-text">Pending Review</div>
+        </div>
+        <br>
+        <button class="action">WRITE ARTICLE</button>
+      `;
+      articlesBox.style.display = "block";
+      break;
+    case "Editor":
+      articlesBox.innerHTML = `
+        <div class="info-title">ARTICLES</div><br>
+        <div class="streak-card small">
+          <div class="streak-num">3</div>
+          <div class="streak-text">To Edit & Review</div>
+        </div>
+        <br>
+        <button class="action">TO ARTICLES</button>
+      `;
+      articlesBox.style.display = "block";
+      break;
+    case "Teacher":
+      articlesBox.innerHTML = `
+        <div class="info-title">ARTICLES</div><br>
+        <div class="streak-card small">
+          <div class="streak-num">3</div>
+          <div class="streak-text">To Review & Publish</div>
+        </div>
+        <br>
+        <button class="action">TO ARTICLES</button>
+      `;
+      articlesBox.style.display = "block";
+      break;
+    case "Owner":
+      articlesBox.innerHTML = `
+        <div class="info-title">APPLICATIONS</div><br>
+        <div class="streak-card small">
+          <div class="streak-num">5</div>
+          <div class="streak-text">Pending Review</div>
+        </div>
+        <br>
+        <button class="action">MANAGE USERS</button>
+      `;
+      articlesBox.style.display = "block";
+      break;
+    default:
+      articlesBox.style.display = "none";
+  }
+}
+
+// Role Switch Buttons (for testing)
+document.querySelectorAll(".role-buttons button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    userRole = btn.dataset.role;
+    renderDashboard();
+  });
+});
+
+// Initial render
+renderDashboard();
+
 
 // [F] Account Page Logic
 // ----------------------------------------------
@@ -184,3 +268,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     return wireAccountPage(user);
   }
 });
+
